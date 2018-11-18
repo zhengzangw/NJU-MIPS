@@ -1,21 +1,22 @@
-module le(
+`include "macro.v"
+module regfile(
     input wire clk,
     input wire rst,
-    
+
     input wire we,
     input wire[`REGADDRBUS] waddr,
-    input wire[`REGDATABUS] wdata,
+    input wire[`REGBUS] wdata,
 
     input wire re1,
     input wire[`REGADDRBUS] raddr1,
-    output wire[`REGDATABUS] rdata1,
+    output wire[`REGBUS] rdata1,
 
     input wire re2,
     input wire[`REGADDRBUS] raddr2,
-    output wire[`REGDATABUS] rdata2
+    output wire[`REGBUS] rdata2
 )
 
-    reg[`REGDATABUS] reg[0:`REGNUM-1];
+    reg[`REGBUS] reg[0:`REGNUM-1];
 
     always @(posedge clk) begin
         if (rst == `RSTDISABLE) begin

@@ -1,10 +1,11 @@
+`include "macro.v"
 module if_id(
     input wire  clk,
     input wire  rst,
     input wire[`INSTADDRBUS] if_pc,
-    input wire[`INSTDATABUS] if_inst,
+    input wire[`INSTBUS] if_inst,
     output reg[`INSTADDRBUS] id_pc,
-    output reg[`INSTADDRBUS] id_inst
+    output reg[`INSTBUS] id_inst
 );
 
     always @(posedge clk) begin

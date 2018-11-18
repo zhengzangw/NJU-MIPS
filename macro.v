@@ -18,14 +18,14 @@
 
 //***** PC *****
 `define   INSTADDRBUS    31:0
-`define   INSTDATABUS    31:0
+`define   INSTBUS    31:0
 `define   INSTMEMNUM     131071
 `define   INSTMEMNUMLOG2 17
 
 
 //***** REGFILE *****
 `define   REGADDRBUS     4:0
-`define   REGDATABUS     31:0
+`define   REGBUS         31:0
 `define   REGWIDTH       32
 `define   DOUBLEREGWIDTH 64
 `define   DOUBLEREGBUS   63:0

@@ -1,7 +1,9 @@
+`include "macro.v"
+
 module(
     input wire rst,
     input wire[`INSTADDRBUS] pc_i,
-    input wire[`INSTDATABUS] inst_i,
+    input wire[`INSTBUS] inst_i,
 
     input wire[`REGBUS] reg1_data_i,
     input wire[`REGBUS] reg2_data_i,

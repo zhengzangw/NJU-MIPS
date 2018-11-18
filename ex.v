@@ -1,3 +1,4 @@
+`include "macro.v"
 module ex(
     input wire rst,
 

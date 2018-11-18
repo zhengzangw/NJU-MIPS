@@ -1,3 +1,4 @@
+`include "macro.v"
 module mem(
     input wire rst,
 

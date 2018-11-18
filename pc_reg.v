@@ -1,4 +1,3 @@
-`resetall
 `include "macro.v"
 
 module pc_reg(
