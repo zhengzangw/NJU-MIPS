@@ -9,7 +9,7 @@ module ex_mem(
 
     output reg[`REGADDRBUS]  mem_wd,
     output reg               mem_wreg,
-    output reg[`REGBUS]      mem_wdate
+    output reg[`REGBUS]      mem_wdata
 );
 
     always @(posedge clk) begin

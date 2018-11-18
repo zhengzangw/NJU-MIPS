@@ -1,6 +1,6 @@
 `include "macro.v"
 
-module(
+module id(
     input wire rst,
     input wire[`INSTADDRBUS] pc_i,
     input wire[`INSTBUS] inst_i,
@@ -86,9 +86,9 @@ module(
     always @(*) begin
         if (rst==`RSTENABLE) begin
             reg2_o <= `ZEROWORD;
-        end else if (reg2_read_o == 2'b2) begin
+        end else if (reg2_read_o == 1'b1) begin
             reg2_o <= reg2_data_i;
-        end else if (reg2_read_o == 2'b0) begin
+        end else if (reg2_read_o == 1'b0) begin
             reg2_o <= imm;
         end else begin
             reg2_o <= `ZEROWORD;

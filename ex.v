@@ -11,7 +11,7 @@ module ex(
 
     output reg[`REGADDRBUS]  wd_o,
     output reg  wreg_o,
-    output reg[`REGBUS] wdate_o,
+    output reg[`REGBUS] wdata_o
 );
 
     reg[`REGBUS] logicout;

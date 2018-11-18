@@ -11,12 +11,12 @@ module id_ex(
     input wire id_wreg,
 
     output reg[`ALUOPBUS] ex_aluop,
-    output reg['ALUSELBUS] ex_alusel,
+    output reg[`ALUSELBUS] ex_alusel,
     output reg[`REGBUS] ex_reg1,
     output reg[`REGBUS] ex_reg2,
     output reg[`REGADDRBUS] ex_wd,
     output reg ex_wreg
- )
+ );
 
     always @(posedge clk) begin
         if (rst == `RSTENABLE) begin
@@ -25,7 +25,7 @@ module id_ex(
             ex_reg1 <= `ZEROWORD;
             ex_reg2 <= `ZEROWORD;
             ex_wd <= `NOPREGADDR;
-            ex_wreg <- `WRITEDISABLE;
+            ex_wreg <= `WRITEDISABLE;
         end else begin
             ex_aluop <= id_aluop;
             ex_alusel<= id_alusel;

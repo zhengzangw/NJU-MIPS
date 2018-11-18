@@ -1,7 +1,7 @@
 `include "macro.v"
 `timescale 1ns/1ps
 
-module ori_spoc_vt();
+module ori_sopc_tst();
 reg CLOCK_50;
 reg rst;
 

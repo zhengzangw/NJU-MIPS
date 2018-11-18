@@ -1,4 +1,5 @@
-module openmips(
+`include "macro.v"
+module NJU_MIPS(
     input wire clk,
     input wire rst,
 
@@ -9,14 +10,14 @@ module openmips(
 
     wire[`INSTADDRBUS] pc;
     wire[`INSTADDRBUS] id_pc_i;
-    wire[`INSTDATABUS] id_inst_i;
+    wire[`INSTBUS] id_inst_i;
 
     wire[`ALUOPBUS] id_aluop_o;
-    wire[`ALUSELBUS] idalusel_o;
+    wire[`ALUSELBUS] id_alusel_o;
     wire[`REGBUS] id_reg1_o;
     wire[`REGBUS] id_reg2_o;
     wire id_wreg_o;
-    wire[`REGADDRBUS] ex_wd_i;
+    wire[`REGADDRBUS] id_wd_o;
 
     wire[`ALUOPBUS] ex_aluop_i;
     wire[`ALUSELBUS]ex_alusel_i;
@@ -72,10 +73,11 @@ module openmips(
     regfile regfile1(
         .clk(clk), .rst(rst),
         .we(wb_wreg_i), .waddr(wb_wd_i),
-        .wdata(wb_wdata_i), .re1(reg1_read),
-        .raddr(reg1_addr), .rdata1(reg1_data),
+        .wdata(wb_wdata_i), 
+		  .re1(reg1_read), .raddr1(reg1_addr), 
+		  .rdata1(reg1_data),
         .re2(reg2_read), .raddr2(reg2_addr),
-        .rdatda2(reg2_data)
+        .rdata2(reg2_data)
     );
 
     id_ex id_ex0(
@@ -89,10 +91,10 @@ module openmips(
     );
 
     ex ex0(
-        .rst(rst)
-        .aluop_i(ex_aluop_i), alusel_i(ex_alusel_i),
+        .rst(rst),
+        .aluop_i(ex_aluop_i), .alusel_i(ex_alusel_i),
         .reg1_i(ex_reg1_i), .reg2_i(ex_reg2_i),
-        .wd_i(ex_wd_i), .wreeg_i(ex_wreg_i)_,
+        .wd_i(ex_wd_i), .wreg_i(ex_wreg_i),
         .wd_o(ex_wd_o), .wreg_o(ex_wreg_o),
         .wdata_o(ex_wdata_o)
     );
@@ -115,7 +117,7 @@ module openmips(
 
     mem_wb mem_wb0(
         .clk(clk), .rst(rst),
-        .mem_wd(mem_wd_o), ..mem_wreg(mem_wreg_o),
+        .mem_wd(mem_wd_o), .mem_wreg(mem_wreg_o),
         .mem_wdata(mem_wdata_o),
         .wb_wd(wb_wd_i), .wb_wreg(wb_wreg_i),
         .wb_wdata(wb_wdata_i)

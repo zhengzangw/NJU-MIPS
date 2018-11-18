@@ -9,14 +9,14 @@ module regfile(
 
     input wire re1,
     input wire[`REGADDRBUS] raddr1,
-    output wire[`REGBUS] rdata1,
+    output reg[`REGBUS] rdata1,
 
     input wire re2,
     input wire[`REGADDRBUS] raddr2,
-    output wire[`REGBUS] rdata2
-)
+    output reg[`REGBUS] rdata2
+);
 
-    reg[`REGBUS] reg[0:`REGNUM-1];
+    reg[`REGBUS] regs[0:`REGNUM-1];
 
     always @(posedge clk) begin
         if (rst == `RSTDISABLE) begin

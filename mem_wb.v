@@ -1,3 +1,4 @@
+`include "macro.v"
 module mem_wb(
     input wire clk,
     input wire rst,
@@ -14,7 +15,7 @@ module mem_wb(
     always @ (posedge clk) begin
         if (rst == `RSTENABLE) begin
             wb_wd <= `NOPREGADDR;
-            wb_wreg <= `WRITEBDISABLE;
+            wb_wreg <= `WRITEDISABLE;
             wb_wdata <= `ZEROWORD;
         end else begin
             wb_wd <= mem_wd;
