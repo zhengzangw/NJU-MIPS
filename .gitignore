@@ -1,3 +1,4 @@
 *.bak
 compile.txt
 .DS_Store
+.vcd

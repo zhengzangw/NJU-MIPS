@@ -70,7 +70,7 @@ module NJU_MIPS(
         .wd_o(id_wd_o), .wreg_o(id_wreg_o)
     );
 
-    regfile regfile1(
+    regfile regfile0(
         .clk(clk), .rst(rst),
         .we(wb_wreg_i), .waddr(wb_wd_i),
         .wdata(wb_wdata_i), 

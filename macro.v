@@ -42,3 +42,10 @@
 
 `define   EXE_RES_LOGIC  3'b001 
 `define   EXE_RES_NOP    3'b000
+
+//***** FILE *****
+`ifdef MAC
+`define   INST_ROM_FILE  "inst_rom.data"
+`else
+`define   INST_ROM_FILE  "C:/Users/Fermat/workplace/exp12/inst_rom.data"
+`endif

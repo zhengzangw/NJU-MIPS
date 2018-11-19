@@ -7,7 +7,7 @@ module inst_rom(
 
     reg [`INSTBUS] inst_mem[0:`INSTMEMNUM-1];
 
-    initial $readmemh("C:/Users/Fermat/workplace/exp12/inst_rom.data", inst_mem);
+    initial $readmemh(`INST_ROM_FILE, inst_mem);
 
     always @(*) begin
         if (ce == `CHIPDISABLE) begin

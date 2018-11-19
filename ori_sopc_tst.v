@@ -16,10 +16,11 @@ initial begin
     #1000 $stop;
 end
 
+	 integer i,j;
 initial begin
     $dumpfile("wave.vcd");
-    $dumpvars(0,ori_sopc_tst);
- end
+    $dumpall;
+end
 
 ori_sopc ori_sopc0(
     .clk(CLOCK_50),
