@@ -10,3 +10,6 @@ Files relating simulation is in DEBUG. **NOTE THAT** in module inst\_rom.v, init
   To simulate with Modelsim Altera, wave.do is provided.
 ## Icuras Verilog with scansion
   For mac user, this lite tools is introduced. However, array variables cannot be seen.
+
+# GNU tool chains
+In file GNUmipschain, some files are given for mips compilation in Linux.
