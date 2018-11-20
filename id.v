@@ -30,10 +30,12 @@ module id(
     output reg wreg_o
 );
 
-    wire[5:0] op = inst_i[31:26];
-    wire[4:0] op2= inst_i[10:6];
-    wire[5:0] op3= inst_i[5:0];
-    wire[4:0] op4= inst_i[20:16];
+    wire[5:0] op = inst_i[31:26]; //Instruction Code
+    wire[4:0] sa= inst_i[10:6];   //sa
+    wire[5:0] func = inst_i[5:0]; //Function Code
+    wire[4:0] rt = inst_i[20:16]; //rt
+	 wire[4:0] rs = inst_i[25:21]; //rs
+	 wire[4:0] rd = inst_i[15:11]; //rd
     reg[`REGBUS] imm;
     reg instvalid;
 
@@ -44,37 +46,206 @@ module id(
             wd_o    <= `NOPREGADDR;
             wreg_o <= `WRITEDISABLE;
             instvalid <= `INSTVALID;
-            reg1_read_o <= 1'b0;
-            reg2_read_o <= 1'b0;
+            reg1_read_o <= `READDISABLE;
+            reg2_read_o <= `READDISABLE;
             reg1_addr_o <= `NOPREGADDR;
             reg2_addr_o <= `NOPREGADDR;
-            imm <= 32'h0;
+            imm <= `ZEROWORD;
         end else begin 
             aluop_o <= `EXE_NOP_OP;
             alusel_o <= `EXE_RES_NOP;
-            wd_o    <= inst_i[15:11];
+            wd_o    <= rd;
             wreg_o <= `WRITEDISABLE;
             instvalid <= `INSTINVALID;
-            reg1_read_o <= 1'b0;
-            reg2_read_o <= 1'b0;
-            reg1_addr_o <= inst_i[25:21];
-            reg2_addr_o <= inst_i[20:16];
+            reg1_read_o <= `READDISABLE;
+            reg2_read_o <= `READDISABLE;
+            reg1_addr_o <= rs;
+            reg2_addr_o <= rt;
             imm <= `ZEROWORD;
 
             case (op)
-                `EXE_ORI: begin
-                    wreg_o <= `WRITEENALBE;
-                    aluop_o<= `EXE_OR_OP;
-                    alusel_o<=`EXE_RES_LOGIC;
-                    reg1_read_o <= `READENABLE;
-                    reg2_read_o <= `READDISABLE;
-                    imm <= {16'h0, inst_i[15:0]};
-                    wd_o <= inst_i[20:16];
-                    instvalid <= `INSTVALID;
-                end
-                default: begin
-                end
+					`EXE_SPECIAL: begin
+						case (sa)
+							`NOPREGADDR: begin
+								case (func)
+									`EXE_OR: begin
+										wreg_o <= `WRITEENABLE;
+										aluop_o <= `EXE_OR_OP;
+										alusel_o <= `EXE_RES_LOGIC;
+										reg1_read_o <= `READENABLE;
+										reg2_read_o <= `READENABLE;
+										instvalid <= `INSTVALID;
+									end
+									
+									`EXE_AND: begin
+										wreg_o <= `WRITEENABLE;
+										aluop_o <= `EXE_AND_OP;
+										alusel_o <= `EXE_RES_LOGIC;
+										reg1_read_o <= `READENABLE;
+										reg2_read_o <= `READENABLE;
+										instvalid <= `INSTVALID;
+									end
+									
+									`EXE_XOR: begin
+										wreg_o <= `WRITEENABLE;
+										aluop_o <= `EXE_XOR_OP;
+										alusel_o <= `EXE_RES_LOGIC;
+										reg1_read_o <= `READENABLE;
+										reg2_read_o <= `READENABLE;
+										instvalid <= `INSTVALID;
+									end
+									
+									`EXE_NOR: begin
+										wreg_o <= `WRITEENABLE;
+										aluop_o <= `EXE_NOR_OP;
+										alusel_o <= `EXE_RES_LOGIC;
+										reg1_read_o <= `READENABLE;
+										reg2_read_o <= `READENABLE;
+										instvalid <= `INSTVALID;
+									end
+									
+									`EXE_SLLV: begin
+										wreg_o <= `WRITEENABLE;
+										aluop_o <= `EXE_SLL_OP;
+										alusel_o <= `EXE_RES_SHIFT;
+										reg1_read_o <= `READENABLE;
+										reg2_read_o <= `READENABLE;
+										instvalid <= `INSTVALID;
+									end
+									
+									`EXE_SRLV: begin
+										wreg_o <= `WRITEENABLE;
+										aluop_o <= `EXE_SRL_OP;
+										alusel_o <= `EXE_RES_SHIFT;
+										reg1_read_o <= `READENABLE;
+										reg2_read_o <= `READENABLE;
+										instvalid <= `INSTVALID;
+									end
+									
+									`EXE_SRAV: begin
+										wreg_o <= `WRITEENABLE;
+										aluop_o <= `EXE_SRAV_OP;
+										alusel_o <= `EXE_RES_SHIFT;
+										reg1_read_o <= `READENABLE;
+										reg2_read_o <= `READENABLE;
+										instvalid <= `INSTVALID;
+									end
+									
+									`EXE_SYNC: begin
+										wreg_o <= `WRITEENABLE;
+										aluop_o <= `EXE_NOP_OP;
+										alusel_o <= `EXE_RES_NOP;
+										reg1_read_o <= `READDISABLE;
+										reg2_read_o <= `READDISABLE;
+										instvalid <= `INSTVALID;
+									end
+									
+									`EXE_SLL: begin
+										if (rs==`NOPREGADDR) begin
+											wreg_o <= `WRITEENABLE;
+											aluop_o <= `EXE_SLL_OP;
+											alusel_o <= `EXE_RES_SHIFT;
+											reg1_read_o <= `READDISABLE;
+											reg2_read_o <= `READENABLE;
+											imm[4:0] <= sa;
+											instvalid <= `INSTVALID;
+										end
+									end
+									
+									`EXE_SRL: begin
+										if (rs==`NOPREGADDR) begin
+											wreg_o <= `WRITEENABLE;
+											aluop_o <= `EXE_SRL_OP;
+											alusel_o <= `EXE_RES_SHIFT;
+											reg1_read_o <= `READDISABLE;
+											reg2_read_o <= `READENABLE;
+											imm[4:0] <= sa;
+											instvalid <= `INSTVALID;
+										end
+									end
+									
+									`EXE_SRA: begin
+										if (rs==`NOPREGADDR) begin
+											wreg_o <= `WRITEENABLE;
+											aluop_o <= `EXE_SRA_OP;
+											alusel_o <= `EXE_RES_SHIFT;
+											reg1_read_o <= `READDISABLE;
+											reg2_read_o <= `READENABLE;
+											imm[4:0] <= sa;
+											instvalid <= `INSTVALID;
+										end
+									end
+									
+									default: begin
+									end
+									
+								endcase
+							end
+							
+							default: begin
+							end
+							
+						endcase
+					end
+					
+               `EXE_ORI: begin
+						  wreg_o <= `WRITEENABLE;
+						  aluop_o<= `EXE_OR_OP;
+						  alusel_o<=`EXE_RES_LOGIC;
+						  reg1_read_o <= `READENABLE;
+						  reg2_read_o <= `READDISABLE;
+						  imm <= {16'h0, inst_i[15:0]};
+						  wd_o <= rt;
+						  instvalid <= `INSTVALID;
+					 end
+					 
+					 `EXE_ANDI: begin
+					 	  wreg_o <= `WRITEENABLE;
+						  aluop_o<= `EXE_AND_OP;
+						  alusel_o<=`EXE_RES_LOGIC;
+						  reg1_read_o <= `READENABLE;
+						  reg2_read_o <= `READDISABLE;
+						  imm <= {16'h0, inst_i[15:0]};
+						  wd_o <= rt;
+						  instvalid <= `INSTVALID;
+					 end
+					 
+					 `EXE_XORI: begin
+					 	  wreg_o <= `WRITEENABLE;
+						  aluop_o<= `EXE_XOR_OP;
+						  alusel_o<=`EXE_RES_LOGIC;
+						  reg1_read_o <= `READENABLE;
+						  reg2_read_o <= `READDISABLE;
+						  imm <= {16'h0, inst_i[15:0]};
+						  wd_o <= rt;
+						  instvalid <= `INSTVALID;
+					 end
+					 
+					 `EXE_LUI: begin
+					 	  wreg_o <= `WRITEENABLE;
+						  aluop_o<= `EXE_OR_OP;
+						  alusel_o<=`EXE_RES_LOGIC;
+						  reg1_read_o <= `READENABLE;
+						  reg2_read_o <= `READDISABLE;
+						  imm <= {inst_i[15:0], 16'h0};
+						  wd_o <= rt;
+						  instvalid <= `INSTVALID;
+					 end
+					 
+					 `EXE_PREF: begin
+					 	  wreg_o <= `WRITEENABLE;
+						  aluop_o<= `EXE_NOP_OP;
+						  alusel_o<=`EXE_RES_NOP;
+						  reg1_read_o <= `READDISABLE;
+						  reg2_read_o <= `READDISABLE;
+						  instvalid <= `INSTVALID;
+					 end
+					 
+               default: begin
+               end
+					 
             endcase
+
         end
     end
 
