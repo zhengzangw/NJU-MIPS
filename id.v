@@ -8,6 +8,15 @@ module id(
     input wire[`REGBUS] reg1_data_i,
     input wire[`REGBUS] reg2_data_i,
 
+    // Data from Execution
+    input wire ex_wreg_i,
+    input wire[`REGBUS] ex_wdata_i,
+    input wire[`REGADDRBUS] ex_wd_i,
+    // Data from Writeback
+    input wire mem_wreg_i,
+    input wire[`REGBUS] mem_wdata_i,
+    input wire[`REGADDRBUS] mem_wd_i,
+
     output reg reg1_read_o,
     output reg reg2_read_o,
     output reg[`REGADDRBUS] reg1_addr_o,
@@ -73,6 +82,11 @@ module id(
     always @(*) begin
         if (rst==`RSTENABLE) begin
             reg1_o <= `ZEROWORD;
+        // Data Hazzard
+        end else if ((reg1_read_o==1'b1)&&(ex_wreg_i==1'b1)&&(ex_wd_i==reg1_addr_o)) begin
+            reg1_o <= ex_wdata_i;
+        end else if ((reg1_read_o==1'b1)&&(mem_wreg_i==1'b1)&&(mem_wd_i==reg1_addr_o)) begin
+            reg1_o <= mem_wdata_i;
         end else if (reg1_read_o == 1'b1) begin
             reg1_o <= reg1_data_i;
         end else if (reg1_read_o == 1'b0) begin
@@ -86,6 +100,11 @@ module id(
     always @(*) begin
         if (rst==`RSTENABLE) begin
             reg2_o <= `ZEROWORD;
+        // Data Hazzard
+        end else if ((reg2_read_o==1'b1)&&(ex_wreg_i==1'b1)&&(ex_wd_i==reg2_addr_o)) begin
+            reg2_o <= ex_wdata_i;
+        end else if ((reg2_read_o==1'b1)&&(mem_wreg_i==1'b1)&&(mem_wd_i==reg2_addr_o)) begin
+            reg2_o <= mem_wdata_i;
         end else if (reg2_read_o == 1'b1) begin
             reg2_o <= reg2_data_i;
         end else if (reg2_read_o == 1'b0) begin

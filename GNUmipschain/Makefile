@@ -22,10 +22,12 @@ inst_rom.bin: inst_rom.om
 inst_rom.data: inst_rom.bin
 	./bin2mem -o $@ $<
 
-.PHONY: clean debug
+.PHONY: clean debug copy
 clean:
 	rm -f *.o *.om *.bin *.data *.asm
 
 debug:
 	$(OBJDUMP) -D inst_rom.om > inst_rom.asm
 
+copy:
+	cp inst_rom.data '/home/fermat/Desktop/Parallels Shared Folders/Home/Desktop/NJU_MIPS/DEBUG'

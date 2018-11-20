@@ -16,7 +16,6 @@ initial begin
     #1000 $stop;
 end
 
-	 integer i,j;
 initial begin
     $dumpfile("wave.vcd");
     $dumpall;
