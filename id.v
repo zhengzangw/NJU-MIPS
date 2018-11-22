@@ -65,9 +65,10 @@ module id(
 
             case (op)
 					`EXE_SPECIAL: begin
-						case (sa)
-							`NOPREGADDR: begin
+//						case (sa)
+//							`NOPREGADDR: begin
 								case (func)
+								   //LOGIC
 									`EXE_OR: begin
 										wreg_o <= `WRITEENABLE;
 										aluop_o <= `EXE_OR_OP;
@@ -103,7 +104,7 @@ module id(
 										reg2_read_o <= `READENABLE;
 										instvalid <= `INSTVALID;
 									end
-									
+									//SHIFT
 									`EXE_SLLV: begin
 										wreg_o <= `WRITEENABLE;
 										aluop_o <= `EXE_SLL_OP;
@@ -175,7 +176,7 @@ module id(
 											instvalid <= `INSTVALID;
 										end
 									end
-									
+									//MOVE
 									`EXE_MFHI: begin
 										wreg_o <= `WRITEENABLE;
 										aluop_o <= `EXE_MFHI_OP;
@@ -235,19 +236,89 @@ module id(
 											wreg_o <= `WRITEDISABLE;
 										end
 									end
+									//ARITHMATIC
+									`EXE_SLT: begin
+										wreg_o <= `WRITEENABLE;
+										aluop_o <= `EXE_SLT_OP;
+										alusel_o <= `EXE_RES_ARITH;
+										reg1_read_o <= `READENABLE;
+										reg2_read_o <= `READENABLE;
+										instvalid <= `INSTVALID;
+									end
+									
+									`EXE_SLTU: begin
+										wreg_o <= `WRITEENABLE;
+										aluop_o <= `EXE_SLTU_OP;
+										alusel_o <= `EXE_RES_ARITH;
+										reg1_read_o <= `READENABLE;
+										reg2_read_o <= `READENABLE;
+										instvalid <= `INSTVALID;
+									end
+									
+									`EXE_ADD: begin
+										wreg_o <= `WRITEENABLE;
+										aluop_o <= `EXE_ADD_OP;
+										alusel_o <= `EXE_RES_ARITH;
+										reg1_read_o <= `READENABLE;
+										reg2_read_o <= `READENABLE;
+										instvalid <= `INSTVALID;
+									end
+									
+									`EXE_ADDU: begin
+										wreg_o <= `WRITEENABLE;
+										aluop_o <= `EXE_ADDU_OP;
+										alusel_o <= `EXE_RES_ARITH;
+										reg1_read_o <= `READENABLE;
+										reg2_read_o <= `READENABLE;
+										instvalid <= `INSTVALID;
+									end
+									
+									`EXE_SUB: begin
+										wreg_o <= `WRITEENABLE;
+										aluop_o <= `EXE_SUB_OP;
+										alusel_o <= `EXE_RES_ARITH;
+										reg1_read_o <= `READENABLE;
+										reg2_read_o <= `READENABLE;
+										instvalid <= `INSTVALID;
+									end
+									
+									`EXE_SUBU: begin
+										wreg_o <= `WRITEENABLE;
+										aluop_o <= `EXE_SUBU_OP;
+										alusel_o <= `EXE_RES_ARITH;
+										reg1_read_o <= `READENABLE;
+										reg2_read_o <= `READENABLE;
+										instvalid <= `INSTVALID;
+									end
+									
+									`EXE_MULT: begin
+										wreg_o <= `WRITEDISABLE;
+										aluop_o <= `EXE_MULT_OP;
+										reg1_read_o <= `READENABLE;
+										reg2_read_o <= `READENABLE;
+										instvalid <= `INSTVALID;
+									end
+									
+									`EXE_MULTU: begin
+										wreg_o <= `WRITEDISABLE;
+										aluop_o <= `EXE_MULTU_OP;
+										reg1_read_o <= `READENABLE;
+										reg2_read_o <= `READENABLE;
+										instvalid <= `INSTVALID;
+									end
 									
 									default: begin
 									end
 									
 								endcase
-							end
+//							end
 							
-							default: begin
-							end
+//							default: begin
+//							end
 							
-						endcase
+//						endcase
 					end
-					
+					//LOGIC
                `EXE_ORI: begin
 						  wreg_o <= `WRITEENABLE;
 						  aluop_o<= `EXE_OR_OP;
@@ -300,6 +371,84 @@ module id(
 						  reg2_read_o <= `READDISABLE;
 						  instvalid <= `INSTVALID;
 					 end
+					 //ARITHMATIC
+					 `EXE_SLTI: begin
+					     wreg_o <= `WRITEENABLE;
+						  aluop_o <= `EXE_SLT_OP;
+						  alusel_o <= `EXE_RES_ARITH;
+						  reg1_read_o <= `READENABLE;
+						  reg2_read_o <= `READDISABLE;
+						  imm <= {{16{inst_i[15]}},inst_i[15:0]};
+						  wd_o <= rt;
+						  instvalid <= `INSTVALID;
+					 end
+					 
+					 `EXE_SLTIU: begin
+					     wreg_o <= `WRITEENABLE;
+						  aluop_o <= `EXE_SLTU_OP;
+						  alusel_o <= `EXE_RES_ARITH;
+						  reg1_read_o <= `READENABLE;
+						  reg2_read_o <= `READDISABLE;
+						  imm <= {{16{inst_i[15]}},inst_i[15:0]};
+						  wd_o <= rt;
+						  instvalid <= `INSTVALID;
+					 end
+					 
+					 `EXE_ADDI: begin
+						  wreg_o <= `WRITEENABLE;
+						  aluop_o <= `EXE_ADD_OP;
+						  alusel_o <= `EXE_RES_ARITH;
+						  reg1_read_o <= `READENABLE;
+						  reg2_read_o <= `READDISABLE;
+						  imm <= {{16{inst_i[15]}},inst_i[15:0]};
+						  wd_o <= rt;
+						  instvalid <= `INSTVALID;
+					 end
+					 
+					 `EXE_ADDIU: begin
+					     wreg_o <= `WRITEENABLE;
+						  aluop_o <= `EXE_ADDU_OP;
+						  alusel_o <= `EXE_RES_ARITH;
+						  reg1_read_o <= `READENABLE;
+						  reg2_read_o <= `READDISABLE;
+						  imm <= {{16{inst_i[15]}},inst_i[15:0]};
+						  wd_o <= rt;
+						  instvalid <= `INSTVALID;
+					 end
+					 
+					 `EXE_SPECIAL2: begin
+							case(func)
+								`EXE_CLZ: begin
+									wreg_o <= `WRITEENABLE;
+									aluop_o <= `EXE_CLZ_OP;
+									alusel_o <= `EXE_RES_ARITH;
+									reg1_read_o <= `READENABLE;
+									reg2_read_o <= `READDISABLE;
+									instvalid <= `INSTVALID;
+								end
+								
+								`EXE_CLO: begin
+									wreg_o <= `WRITEENABLE;
+									aluop_o <= `EXE_CLO_OP;
+									alusel_o <= `EXE_RES_ARITH;
+									reg1_read_o <= `READENABLE;
+									reg2_read_o <= `READDISABLE;
+									instvalid <= `INSTVALID;
+								end
+								
+								`EXE_MUL: begin
+									wreg_o <= `WRITEENABLE;
+									aluop_o <= `EXE_MUL_OP;
+									alusel_o <= `EXE_RES_ARITH;
+									reg1_read_o <= `READENABLE;
+									reg2_read_o <= `READENABLE;
+									instvalid <= `INSTVALID;
+								end
+								
+								default: begin
+								end
+							endcase
+					 end
 					 
                default: begin
                end
@@ -314,13 +463,13 @@ module id(
         if (rst==`RSTENABLE) begin
             reg1_o <= `ZEROWORD;
         // Data Hazzard
-        end else if ((reg1_read_o==1'b1)&&(ex_wreg_i==1'b1)&&(ex_wd_i==reg1_addr_o)) begin
+        end else if ((reg1_read_o==`READENABLE)&&(ex_wreg_i==`WRITEENABLE)&&(ex_wd_i==reg1_addr_o)) begin
             reg1_o <= ex_wdata_i;
-        end else if ((reg1_read_o==1'b1)&&(mem_wreg_i==1'b1)&&(mem_wd_i==reg1_addr_o)) begin
+        end else if ((reg1_read_o==`READENABLE)&&(mem_wreg_i==`WRITEENABLE)&&(mem_wd_i==reg1_addr_o)) begin
             reg1_o <= mem_wdata_i;
-        end else if (reg1_read_o == 1'b1) begin
+        end else if (reg1_read_o == `READENABLE) begin
             reg1_o <= reg1_data_i;
-        end else if (reg1_read_o == 1'b0) begin
+        end else if (reg1_read_o == `READDISABLE) begin
             reg1_o <= imm;
         end else begin
             reg1_o <= `ZEROWORD;
@@ -332,13 +481,13 @@ module id(
         if (rst==`RSTENABLE) begin
             reg2_o <= `ZEROWORD;
         // Data Hazzard
-        end else if ((reg2_read_o==1'b1)&&(ex_wreg_i==1'b1)&&(ex_wd_i==reg2_addr_o)) begin
+        end else if ((reg2_read_o==`READENABLE)&&(ex_wreg_i==`WRITEENABLE)&&(ex_wd_i==reg2_addr_o)) begin
             reg2_o <= ex_wdata_i;
-        end else if ((reg2_read_o==1'b1)&&(mem_wreg_i==1'b1)&&(mem_wd_i==reg2_addr_o)) begin
+        end else if ((reg2_read_o==`READENABLE)&&(mem_wreg_i==`WRITEENABLE)&&(mem_wd_i==reg2_addr_o)) begin
             reg2_o <= mem_wdata_i;
-        end else if (reg2_read_o == 1'b1) begin
+        end else if (reg2_read_o == `READENABLE) begin
             reg2_o <= reg2_data_i;
-        end else if (reg2_read_o == 1'b0) begin
+        end else if (reg2_read_o == `READDISABLE) begin
             reg2_o <= imm;
         end else begin
             reg2_o <= `ZEROWORD;

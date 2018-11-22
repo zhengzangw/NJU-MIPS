@@ -30,10 +30,21 @@ module ex(
     reg[`REGBUS] logicout;
 	 reg[`REGBUS] shiftres;
 	 reg[`REGBUS] moveres;
+	 reg[`REGBUS] arithres;
+	 reg[`DOUBLEREGBUS] mulres;
 	 
 	 reg[`REGBUS] HI;
 	 reg[`REGBUS] LO;
 	 
+	 wire overflow;
+	 wire reg1_eq_reg2;
+	 wire reg1_lt_reg2;
+	 wire[`REGBUS] reg2_i_mux;
+	 wire[`REGBUS] reg1_i_not;
+	 wire[`REGBUS] sumres;
+	 wire[`REGBUS] opdata1_mult;
+	 wire[`REGBUS] opdata2_mult;
+	 wire[`DOUBLEREGBUS] hilo_temp;
 	 
 	 //HI LO
 	 always @(*) begin
@@ -48,6 +59,87 @@ module ex(
 		end
 	 end
 	 
+	 
+	 //EXE_RES_MUL
+	 assign opdata1_mult=(((aluop_i==`EXE_MUL_OP)||(aluop_i==`EXE_MULT_OP))&&(reg1_i[31]==1'b1))?(~reg1_i + 1):reg1_i;
+	 assign opdata2_mult=(((aluop_i==`EXE_MUL_OP)||(aluop_i==`EXE_MULT_OP))&&(reg2_i[31]==1'b1))?(~reg2_i + 1):reg2_i;
+	 assign hilo_temp = opdata1_mult * opdata2_mult;
+	 
+	 always @(*) begin
+		if (rst == `RSTENABLE) begin
+			mulres <= {`ZEROWORD, `ZEROWORD};
+		end else if ((aluop_i==`EXE_MULT_OP)||(aluop_i==`EXE_MUL_OP)) begin
+			if (reg1_i[31]^reg2_i[31] == 1'b1) begin
+				mulres <= ~hilo_temp + 1;
+			end else begin
+				mulres <= hilo_temp;
+			end
+		end else begin
+			mulres <= hilo_temp;
+		end
+	 end
+	 
+	 
+	 //EXE_RES_ARITH
+	 assign reg2_i_mux = ((aluop_i == `EXE_SUB_OP)||(aluop_i == `EXE_SUBU_OP)||(aluop_i == `EXE_SLT_OP)) ? (~reg2_i)+1:reg2_i;
+	 assign sumres = reg1_i + reg2_i_mux;
+	 assign overflow = ((!reg1_i[31] && !reg2_i_mux[31]) && sumres[31]) || ((reg1_i[31] && reg1_i[31]) && (!sumres[31]));
+	 assign reg1_lt_reg2 =(aluop_i==`EXE_SLT_OP)?
+	 ( (reg1_i[31] && !reg2_i[31])||(!reg1_i[31]&&!reg2_i[31]&&sumres[31])||(reg1_i[31]&&reg2_i[31]&&sumres[31]))
+	 :(reg1_i<reg2_i);
+	 assign reg1_i_not = ~reg1_i;
+	 
+	 always @(*) begin
+		 if (rst==`RSTENABLE) begin
+			  arithres <= `ZEROWORD;
+		 end else begin
+			case (aluop_i)
+				`EXE_SLT_OP, `EXE_SLTU_OP: begin
+					arithres <= reg1_lt_reg2;
+				end
+				
+				`EXE_ADD_OP, `EXE_ADDU_OP, `EXE_SUB_OP, `EXE_SUBU_OP: begin
+					arithres <= sumres;
+				end
+				
+				`EXE_CLZ_OP: begin
+					arithres <= 	reg1_i[31] ? 0 : reg1_i[30] ? 1 : reg1_i[29] ? 2 :
+										reg1_i[28] ? 3 : reg1_i[27] ? 4 : reg1_i[26] ? 5 :
+										reg1_i[25] ? 6 : reg1_i[24] ? 7 : reg1_i[23] ? 8 : 
+										reg1_i[22] ? 9 : reg1_i[21] ? 10 : reg1_i[20] ? 11 :
+										reg1_i[19] ? 12 : reg1_i[18] ? 13 : reg1_i[17] ? 14 : 
+										reg1_i[16] ? 15 : reg1_i[15] ? 16 : reg1_i[14] ? 17 : 
+										reg1_i[13] ? 18 : reg1_i[12] ? 19 : reg1_i[11] ? 20 :
+										reg1_i[10] ? 21 : reg1_i[9] ? 22 : reg1_i[8] ? 23 : 
+										reg1_i[7] ? 24 : reg1_i[6] ? 25 : reg1_i[5] ? 26 : 
+										reg1_i[4] ? 27 : reg1_i[3] ? 28 : reg1_i[2] ? 29 : 
+										reg1_i[1] ? 30 : reg1_i[0] ? 31 : 32 ;
+				end
+				
+				`EXE_CLO_OP: begin
+					arithres <= (reg1_i_not[31] ? 0 : reg1_i_not[30] ? 1 : reg1_i_not[29] ? 2 :
+									 reg1_i_not[28] ? 3 : reg1_i_not[27] ? 4 : reg1_i_not[26] ? 5 :
+									 reg1_i_not[25] ? 6 : reg1_i_not[24] ? 7 : reg1_i_not[23] ? 8 : 
+									 reg1_i_not[22] ? 9 : reg1_i_not[21] ? 10 : reg1_i_not[20] ? 11 :
+									 reg1_i_not[19] ? 12 : reg1_i_not[18] ? 13 : reg1_i_not[17] ? 14 : 
+									 reg1_i_not[16] ? 15 : reg1_i_not[15] ? 16 : reg1_i_not[14] ? 17 : 
+									 reg1_i_not[13] ? 18 : reg1_i_not[12] ? 19 : reg1_i_not[11] ? 20 :
+									 reg1_i_not[10] ? 21 : reg1_i_not[9] ? 22 : reg1_i_not[8] ? 23 : 
+									 reg1_i_not[7] ? 24 : reg1_i_not[6] ? 25 : reg1_i_not[5] ? 26 : 
+									 reg1_i_not[4] ? 27 : reg1_i_not[3] ? 28 : reg1_i_not[2] ? 29 : 
+									 reg1_i_not[1] ? 30 : reg1_i_not[0] ? 31 : 32) ;
+				end
+				
+				`EXE_MUL_OP: begin
+					arithres <= mulres[31:0];
+				end
+				
+				default: begin
+					arithres <= `ZEROWORD;
+				end
+			endcase
+		end
+	end
 
 	 //EXE_RES_LOGIC
     always @(*) begin
@@ -108,38 +200,43 @@ module ex(
 	
 	 //EXE_RES_MOVE
 	 always @(*) begin
-	 if (rst == `RSTENABLE) begin
-		  moveres <= `ZEROWORD;
-	 end else begin
-		  moveres <= `ZEROWORD;
-		  case (aluop_i)
-			  `EXE_MFHI_OP: begin
-				  moveres <= HI;
+		 if (rst == `RSTENABLE) begin
+			  moveres <= `ZEROWORD;
+		 end else begin
+			  moveres <= `ZEROWORD;
+			  case (aluop_i)
+				  `EXE_MFHI_OP: begin
+					  moveres <= HI;
+				  end
+				
+				  `EXE_MFLO_OP: begin
+					  moveres <= LO;
+				  end
+				
+				  `EXE_MOVZ_OP: begin
+					  moveres <= reg1_i;
+				  end
+				
+				  `EXE_MOVN_OP: begin
+					  moveres <= reg1_i;
+				  end
+				
+				  default: begin
+				  end
+			  endcase
 			  end
-			
-			  `EXE_MFLO_OP: begin
-			 	  moveres <= LO;
-			  end
-			
-			  `EXE_MOVZ_OP: begin
-			  	  moveres <= reg1_i;
-			  end
-			
-			  `EXE_MOVN_OP: begin
-			  	  moveres <= reg1_i;
-			  end
-			
-			  default: begin
-			  end
-		  endcase
-	     end
 	 end
 	 
 
 	 //wdata_o
     always @(*) begin 
         wd_o <= wd_i;
-        wreg_o <= wreg_i;
+		  if (((aluop_i == `EXE_ADD_OP)||(aluop_i == `EXE_SUB_OP))&&(overflow)  ) begin
+				wreg_o <= `WRITEDISABLE;
+		  end else begin
+				wreg_o <= wreg_i;
+		  end
+		  
         case (alusel_i)
             `EXE_RES_LOGIC: begin
                 wdata_o <= logicout;
@@ -151,6 +248,10 @@ module ex(
 				
 				`EXE_RES_MOVE: begin
 					wdata_o <= moveres;
+				end
+				
+				`EXE_RES_ARITH: begin
+					wdata_o <= arithres;
 				end
 				
             default: begin
@@ -166,6 +267,10 @@ module ex(
 			whilo_o <= `WRITEDISABLE;
 			hi_o <= `ZEROWORD;
 			lo_o <= `ZEROWORD;
+		end else if ((aluop_i == `EXE_MULT_OP) || (aluop_i == `EXE_MULTU_OP)) begin
+			whilo_o <= `WRITEENABLE;
+			hi_o <= mulres[63:32];
+			lo_o <= mulres[31:0];
 		end else if (aluop_i == `EXE_MTHI_OP) begin
 			whilo_o <= `WRITEENABLE;
 			hi_o <= reg1_i;
