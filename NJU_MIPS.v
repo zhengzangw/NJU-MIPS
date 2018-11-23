@@ -5,7 +5,9 @@ module NJU_MIPS(
 
     input wire[`REGBUS] rom_data_i,
     output wire[`REGBUS] rom_addr_o,
-    output wire  rom_ce_o
+    output wire  rom_ce_o,
+	 //DEBUG
+	 output wire[9:0] debug
 );
 	 //pc_reg - id_ex
     wire[`INSTADDRBUS] pc;
@@ -63,17 +65,28 @@ module NJU_MIPS(
 	 //hilo
 	 wire[`REGBUS] hi;
 	 wire[`REGBUS] lo;
+	 //stall
+	 wire[`DOUBLEREGBUS] hilo_temp_o;
+	 wire[1:0] cnt_o;
+	 wire[`DOUBLEREGBUS] hilo_temp_i;
+	 wire[1:0] cnt_i;
+	 
+	 wire[5:0] stall;
+	 wire stallreq_id;
+	 wire stallreq_ex;
 	 
 
     pc_reg pc_reg0(
-        .clk(clk), .rst(rst), .pc(pc), .ce(rom_ce_o)
+        .clk(clk), .rst(rst), .pc(pc), .ce(rom_ce_o),
+		  .stall(stall)
     );
     assign rom_addr_o = pc;
 
     if_id if_id0(
         .clk(clk), .rst(rst), .if_pc(pc),
         .if_inst(rom_data_i), .id_pc(id_pc_i),
-        .id_inst(id_inst_i)
+        .id_inst(id_inst_i),
+		  .stall(stall)
     );
 
     id id0(
@@ -90,7 +103,8 @@ module NJU_MIPS(
         .ex_wd_i(ex_wd_o),
         .mem_wreg_i(mem_wreg_o),
         .mem_wdata_i(mem_wdata_o),
-        .mem_wd_i(mem_wd_o)
+        .mem_wd_i(mem_wd_o),
+		  .stallreq(stallreq_id)
     );
 
     regfile regfile0(
@@ -110,7 +124,8 @@ module NJU_MIPS(
         .id_wd(id_wd_o), .id_wreg(id_wreg_o),
         .ex_aluop(ex_aluop_i), .ex_alusel(ex_alusel_i),
         .ex_reg1(ex_reg1_i), .ex_reg2(ex_reg2_i),
-        .ex_wd(ex_wd_i), .ex_wreg(ex_wreg_i)
+        .ex_wd(ex_wd_i), .ex_wreg(ex_wreg_i),
+		  .stall(stall)
     );
 
     ex ex0(
@@ -129,7 +144,13 @@ module NJU_MIPS(
 		  .mem_whilo_i(mem_whilo_o),
 		  
 		  .hi_o(ex_hi_o), .lo_o(ex_lo_o),
-		  .whilo_o(ex_whilo_o)
+		  .whilo_o(ex_whilo_o),
+		  
+		  .hilo_temp_i(hilo_temp_i),
+		  .cnt_i(cnt_i),
+		  .hilo_temp_o(hilo_temp_o),
+		  .cnt_o(cnt_o),
+		  .stallreq(stallreq_ex)
     );
 
     ex_mem ex_mem0(
@@ -142,7 +163,13 @@ module NJU_MIPS(
 		  .ex_hi(ex_hi_o), .ex_lo(ex_lo_o),
 		  .ex_whilo(ex_whilo_o),
 		  .mem_hi(mem_hi_i), .mem_lo(mem_lo_i),
-		  .mem_whilo(mem_whilo_i)
+		  .mem_whilo(mem_whilo_i),
+		  
+		  .stall(stall),
+		  .hilo_i(hilo_temp_o),
+		  .cnt_i(cnt_o),
+		  .hilo_o(hilo_temp_i),
+		  .cnt_o(cnt_i)
     );
 
     mem mem0(
@@ -168,9 +195,13 @@ module NJU_MIPS(
         .wb_wd(wb_wd_i), .wb_wreg(wb_wreg_i),
         .wb_wdata(wb_wdata_i),
 		  
-		  .wb_hi(wb_hi_i), .wb_lo(wb_lo_i), .wb_whilo(wb_whilo_i)
+		  .wb_hi(wb_hi_i), .wb_lo(wb_lo_i), .wb_whilo(wb_whilo_i),
+		  
+		  .stall(stall)
     );
 	 
+	 
+	 assign debug = lo[9:0];
 	 hilo_reg hilo_reg0(
 		.clk(clk), .rst(rst),
 		
@@ -179,5 +210,14 @@ module NJU_MIPS(
 		
 		.hi_o(hi), .lo_o(lo)
 	 );
-
+	 
+	 
+	 ctrl ctrl0(
+		.rst(rst),
+		.stallreq_id(stallreq_id),
+		.stallreq_ex(stallreq_ex),
+		.stall(stall)
+	 );
+	 
+	 
 endmodule

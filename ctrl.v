@@ -1,3 +1,5 @@
+`include "macro.v"
+
 module ctrl(
     input wire rst,
     input wire stallreq_id,

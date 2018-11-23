@@ -24,7 +24,14 @@ module ex(
 	 input wire wb_whilo_i,
 	 input wire[`REGBUS] mem_hi_i,
 	 input wire[`REGBUS] mem_lo_i,
-	 input wire mem_whilo_i
+	 input wire mem_whilo_i,
+	 
+	 input wire[`DOUBLEREGBUS] hilo_temp_i,
+	 input wire[1:0] cnt_i,
+	 output reg[`DOUBLEREGBUS] hilo_temp_o,
+	 output reg[1:0] cnt_o,
+	 
+	 output reg  stallreq
 );
 
     reg[`REGBUS] logicout;
@@ -45,6 +52,10 @@ module ex(
 	 wire[`REGBUS] opdata1_mult;
 	 wire[`REGBUS] opdata2_mult;
 	 wire[`DOUBLEREGBUS] hilo_temp;
+	 reg[`DOUBLEREGBUS] hilo_temp_reg;
+	 
+	 reg  stallreq_for_madd_msub;
+	 
 	 
 	 //HI LO
 	 always @(*) begin
@@ -61,14 +72,14 @@ module ex(
 	 
 	 
 	 //EXE_RES_MUL
-	 assign opdata1_mult=(((aluop_i==`EXE_MUL_OP)||(aluop_i==`EXE_MULT_OP))&&(reg1_i[31]==1'b1))?(~reg1_i + 1):reg1_i;
-	 assign opdata2_mult=(((aluop_i==`EXE_MUL_OP)||(aluop_i==`EXE_MULT_OP))&&(reg2_i[31]==1'b1))?(~reg2_i + 1):reg2_i;
+	 assign opdata1_mult=(((aluop_i==`EXE_MUL_OP)||(aluop_i==`EXE_MULT_OP)||(aluop_i==`EXE_MADD_OP)||(aluop_i==`EXE_MSUB_OP))&&(reg1_i[31]==1'b1))?(~reg1_i + 1):reg1_i;
+	 assign opdata2_mult=(((aluop_i==`EXE_MUL_OP)||(aluop_i==`EXE_MULT_OP)||(aluop_i==`EXE_MADD_OP)||(aluop_i==`EXE_MSUB_OP))&&(reg2_i[31]==1'b1))?(~reg2_i + 1):reg2_i;
 	 assign hilo_temp = opdata1_mult * opdata2_mult;
 	 
 	 always @(*) begin
 		if (rst == `RSTENABLE) begin
 			mulres <= {`ZEROWORD, `ZEROWORD};
-		end else if ((aluop_i==`EXE_MULT_OP)||(aluop_i==`EXE_MUL_OP)) begin
+		end else if ((aluop_i==`EXE_MULT_OP)||(aluop_i==`EXE_MUL_OP)||(aluop_i==`EXE_MADD_OP)||(aluop_i==`EXE_MSUB_OP)) begin
 			if (reg1_i[31]^reg2_i[31] == 1'b1) begin
 				mulres <= ~hilo_temp + 1;
 			end else begin
@@ -78,6 +89,51 @@ module ex(
 			mulres <= hilo_temp;
 		end
 	 end
+	 
+	 
+	 always @(*) begin
+	   if (rst == `RSTENABLE) begin
+			hilo_temp_o <= {`ZEROWORD, `ZEROWORD};
+			cnt_o <= 2'b00;
+			stallreq_for_madd_msub <= `NOSTOP;
+		end else begin
+			case (aluop_i)
+				`EXE_MADD_OP, `EXE_MADDU_OP: begin
+					if (cnt_i == 2'b00) begin
+						hilo_temp_o <= mulres;
+						cnt_o <= 2'b01;
+						hilo_temp_reg <= {`ZEROWORD, `ZEROWORD};
+						stallreq_for_madd_msub <= `STOP;
+					end else if (cnt_i == 2'b01) begin
+						hilo_temp_o <= {`ZEROWORD, `ZEROWORD};
+						cnt_o <= 2'b10;
+						hilo_temp_reg <= hilo_temp_i + {HI, LO};
+						stallreq_for_madd_msub <= `NOSTOP;
+					end
+				end
+					
+				`EXE_MSUB_OP, `EXE_MSUBU_OP: begin
+					if (cnt_i == 2'b00) begin
+						hilo_temp_o <= ~mulres+1;
+						cnt_o <= 2'b01;
+						hilo_temp_reg <= {`ZEROWORD, `ZEROWORD};
+						stallreq_for_madd_msub <= `STOP;
+					end else if (cnt_i == 2'b01) begin
+						hilo_temp_o <= {`ZEROWORD, `ZEROWORD};
+						cnt_o <= 2'b10;
+						hilo_temp_reg <= hilo_temp_i + {HI, LO};
+						stallreq_for_madd_msub <= `NOSTOP;
+					end
+				end
+				
+				default: begin
+					hilo_temp_o <= {`ZEROWORD, `ZEROWORD};
+					cnt_o <= 2'b00;
+					stallreq_for_madd_msub <= `NOSTOP;
+				end
+			endcase
+		end
+	end
 	 
 	 
 	 //EXE_RES_ARITH
@@ -267,10 +323,12 @@ module ex(
 			whilo_o <= `WRITEDISABLE;
 			hi_o <= `ZEROWORD;
 			lo_o <= `ZEROWORD;
+		end else if ((aluop_i == `EXE_MSUB_OP) || (aluop_i == `EXE_MSUBU_OP) || (aluop_i == `EXE_MADD_OP) || (aluop_i == `EXE_MADDU_OP)) begin
+			whilo_o <= `WRITEENABLE;
+			{hi_o, lo_o} <= hilo_temp_reg;
 		end else if ((aluop_i == `EXE_MULT_OP) || (aluop_i == `EXE_MULTU_OP)) begin
 			whilo_o <= `WRITEENABLE;
-			hi_o <= mulres[63:32];
-			lo_o <= mulres[31:0];
+			{hi_o, lo_o} <= mulres;
 		end else if (aluop_i == `EXE_MTHI_OP) begin
 			whilo_o <= `WRITEENABLE;
 			hi_o <= reg1_i;
@@ -284,6 +342,12 @@ module ex(
 			hi_o <= `ZEROWORD;
 			lo_o <= `ZEROWORD;
 		end
+	end
+	
+	
+	//stall
+	always @(*) begin
+		stallreq = stallreq_for_madd_msub;
 	end
 
 endmodule

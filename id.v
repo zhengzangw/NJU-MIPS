@@ -27,7 +27,9 @@ module id(
     output reg[`REGBUS] reg1_o,
     output reg[`REGBUS] reg2_o,
     output reg[`REGADDRBUS] wd_o,
-    output reg wreg_o
+    output reg wreg_o,
+	 
+	 output wire stallreq
 );
 
     wire[5:0] op = inst_i[31:26]; //Instruction Code
@@ -38,6 +40,8 @@ module id(
 	 wire[4:0] rd = inst_i[15:11]; //rd
     reg[`REGBUS] imm;
     reg instvalid;
+	 
+	 assign stallreq = `NOSTOP;
 
     always @(*) begin
         if (rst==`RSTENABLE) begin 
@@ -440,6 +444,42 @@ module id(
 									wreg_o <= `WRITEENABLE;
 									aluop_o <= `EXE_MUL_OP;
 									alusel_o <= `EXE_RES_ARITH;
+									reg1_read_o <= `READENABLE;
+									reg2_read_o <= `READENABLE;
+									instvalid <= `INSTVALID;
+								end
+								
+								`EXE_MADD: begin
+									wreg_o <= `WRITEDISABLE;
+									aluop_o <= `EXE_MADD_OP;
+									//alusel_o <= `EXE_RES_MUL;
+									reg1_read_o <= `READENABLE;
+									reg2_read_o <= `READENABLE;
+									instvalid <= `INSTVALID;
+								end
+								
+								`EXE_MADDU: begin
+									wreg_o <= `WRITEDISABLE;
+									aluop_o <= `EXE_MADDU_OP;
+									//alusel_o <= `EXE_RES_MUL;
+									reg1_read_o <= `READENABLE;
+									reg2_read_o <= `READENABLE;
+									instvalid <= `INSTVALID;
+								end
+								
+								`EXE_MSUB: begin
+									wreg_o <= `WRITEDISABLE;
+									aluop_o <= `EXE_MSUB_OP;
+									//alusel_o <= `EXE_RES_MUL;
+									reg1_read_o <= `READENABLE;
+									reg2_read_o <= `READENABLE;
+									instvalid <= `INSTVALID;
+								end
+								
+								`EXE_MSUBU: begin
+									wreg_o <= `WRITEDISABLE;
+									aluop_o <= `EXE_MSUBU_OP;
+									//alusel_o <= `EXE_RES_MUL;
 									reg1_read_o <= `READENABLE;
 									reg2_read_o <= `READENABLE;
 									instvalid <= `INSTVALID;

@@ -99,7 +99,11 @@ module DE10_Standard(
 //=======================================================
 //  Structural coding
 //=======================================================
-
+ori_sopc(
+	.clk(CLOCK_50),
+	.rst(!KEY[0]),
+	.debug(LEDR)
+	);
 
 
 endmodule
