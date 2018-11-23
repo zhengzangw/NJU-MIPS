@@ -10,6 +10,8 @@ module mem_wb(
 	 input wire[`REGBUS] mem_lo,
 	 input wire	mem_whilo,
 
+    input wire[5:0] stall,
+
     output reg[`REGADDRBUS] wb_wd,
     output reg wb_wreg,
     output reg[`REGBUS] wb_wdata,
@@ -23,16 +25,23 @@ module mem_wb(
             wb_wd <= `NOPREGADDR;
             wb_wreg <= `WRITEDISABLE;
             wb_wdata <= `ZEROWORD;
-				wb_hi <= `ZEROWORD;
-				wb_lo <= `ZEROWORD;
-				wb_whilo <= `WRITEDISABLE;
-        end else begin
+			wb_hi <= `ZEROWORD;
+			wb_lo <= `ZEROWORD;
+			wb_whilo <= `WRITEDISABLE;
+        end else if (stall[4] == `STOP && stall[5] == `NOSTOP) begin
+            wb_wd <= `NOPREGADDR;
+            wb_wreg <= `WRITEDISABLE;
+            wb_wdata <= `ZEROWORD;
+			wb_hi <= `ZEROWORD;
+			wb_lo <= `ZEROWORD;
+			wb_whilo <= `WRITEDISABLE;
+        end else if (stall[4] == `NOSTOP) begin
             wb_wd <= mem_wd;
             wb_wreg <= mem_wreg;
             wb_wdata <= mem_wdata;
-				wb_hi <= mem_hi;
-				wb_lo <= mem_lo;
-				wb_whilo <= mem_whilo;
+			wb_hi <= mem_hi;
+			wb_lo <= mem_lo;
+			wb_whilo <= mem_whilo;
         end
     end
 

@@ -10,6 +10,8 @@ module id_ex(
     input wire[`REGADDRBUS] id_wd,
     input wire id_wreg,
 
+    input wire[5:0] stall,
+
     output reg[`ALUOPBUS] ex_aluop,
     output reg[`ALUSELBUS] ex_alusel,
     output reg[`REGBUS] ex_reg1,
@@ -26,7 +28,14 @@ module id_ex(
             ex_reg2 <= `ZEROWORD;
             ex_wd <= `NOPREGADDR;
             ex_wreg <= `WRITEDISABLE;
-        end else begin
+        end else if (stall[2] ==`STOP && stall[3] == `NOSTOP) begin
+            ex_aluop <= `EXE_NOP_OP;
+            ex_alusel <= `EXE_RES_NOP;
+            ex_reg1 <= `ZEROWORD;
+            ex_reg2 <= `ZEROWORD;
+            ex_wd <= `NOPREGADDR;
+            ex_wreg <= `WRITEDISABLE;
+        end else if (stall[2] == `NOSTOP) begin
             ex_aluop <= id_aluop;
             ex_alusel<= id_alusel;
             ex_reg1  <= id_reg1;
