@@ -20,6 +20,8 @@ module NJU_MIPS(
     wire[`REGBUS] id_reg2_o;
     wire id_wreg_o;
     wire[`REGADDRBUS] id_wd_o;
+	 wire id_is_in_delayslot_o;
+	 wire[`REGBUS] id_link_address_o;
 	 //id_ex - ex
     wire[`ALUOPBUS] ex_aluop_i;
     wire[`ALUSELBUS]ex_alusel_i;
@@ -27,6 +29,8 @@ module NJU_MIPS(
     wire[`REGBUS] ex_reg2_i;
     wire ex_wreg_i;
     wire[`REGADDRBUS] ex_wd_i;
+	 wire ex_is_in_delayslot_i;
+	 wire[`REGBUS] ex_link_address_i;
 	 //ex - ex_mem
     wire ex_wreg_o;
     wire[`REGADDRBUS] ex_wd_o;
@@ -74,11 +78,18 @@ module NJU_MIPS(
 	 wire[5:0] stall;
 	 wire stallreq_id;
 	 wire stallreq_ex;
+	 //jmp
+	 wire is_in_delayslot_i;
+	 wire is_in_delayslot_o;
+	 wire next_inst_in_delayslot_o;
+	 wire id_jmp_flag_o;
+	 wire[`REGBUS] jmp_target_address;
 	 
 
     pc_reg pc_reg0(
         .clk(clk), .rst(rst), .pc(pc), .ce(rom_ce_o),
-		  .stall(stall)
+		  .stall(stall),
+		  .jmp_flag_i(id_jmp_flag_o), .jmp_target_address_i(jmp_target_address)
     );
     assign rom_addr_o = pc;
 
@@ -104,7 +115,14 @@ module NJU_MIPS(
         .mem_wreg_i(mem_wreg_o),
         .mem_wdata_i(mem_wdata_o),
         .mem_wd_i(mem_wd_o),
-		  .stallreq(stallreq_id)
+		  .stallreq(stallreq_id),
+		  
+		  .is_in_delayslot_i(is_in_delayslot_i),
+		  .next_inst_in_delayslot_o(next_inst_in_delayslot_o),
+		  .jmp_flag_o(id_jmp_flag_o),
+		  .jmp_target_address_o(jmp_target_address),
+		  .link_addr_o(id_link_address_o),
+		  .is_in_delayslot_o(id_is_in_delayslot_o)
     );
 
     regfile regfile0(
@@ -125,7 +143,14 @@ module NJU_MIPS(
         .ex_aluop(ex_aluop_i), .ex_alusel(ex_alusel_i),
         .ex_reg1(ex_reg1_i), .ex_reg2(ex_reg2_i),
         .ex_wd(ex_wd_i), .ex_wreg(ex_wreg_i),
-		  .stall(stall)
+		  .stall(stall),
+		  
+		  .id_link_address(id_link_address_o),
+		  .id_is_in_delayslot(id_is_in_delayslot_o),
+		  .next_inst_in_delayslot_i(next_inst_in_delayslot_o),
+		  .ex_link_address(ex_link_address_i),
+  	     .ex_is_in_delayslot(ex_is_in_delayslot_i),
+		  .is_in_delayslot_o(is_in_delayslot_i)
     );
 
     ex ex0(
@@ -150,7 +175,10 @@ module NJU_MIPS(
 		  .cnt_i(cnt_i),
 		  .hilo_temp_o(hilo_temp_o),
 		  .cnt_o(cnt_o),
-		  .stallreq(stallreq_ex)
+		  .stallreq(stallreq_ex),
+		  
+		  .link_address_i(ex_link_address_i),
+		  .is_in_delayslot_i(ex_is_in_delayslot_i)
     );
 
     ex_mem ex_mem0(

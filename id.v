@@ -16,6 +16,8 @@ module id(
     input wire mem_wreg_i,
     input wire[`REGBUS] mem_wdata_i,
     input wire[`REGADDRBUS] mem_wd_i,
+	 
+	 input wire is_in_delayslot_i,
 
     output reg reg1_read_o,
     output reg reg2_read_o,
@@ -29,6 +31,13 @@ module id(
     output reg[`REGADDRBUS] wd_o,
     output reg wreg_o,
 	 
+	 output reg next_inst_in_delayslot_o,
+	 
+	 output reg	jmp_flag_o,
+	 output reg[`REGBUS] jmp_target_address_o,
+	 output reg[`REGBUS] link_addr_o,
+	 output reg	is_in_delayslot_o,
+	 
 	 output wire stallreq
 );
 
@@ -40,6 +49,13 @@ module id(
 	 wire[4:0] rd = inst_i[15:11]; //rd
     reg[`REGBUS] imm;
     reg instvalid;
+	 
+	 wire[`REGBUS] pc_plus_8;
+	 wire[`REGBUS] pc_plus_4;
+	 wire[`REGBUS] imm_sll2_signedext;
+	 assign pc_plus_8 = pc_i + 8;
+	 assign pc_plus_4 = pc_i + 4;
+	 assign imm_sll2_signedext = {{14{inst_i[15]}}, inst_i[15:0], 2'b00 };
 	 
 	 assign stallreq = `NOSTOP;
 
@@ -55,6 +71,10 @@ module id(
             reg1_addr_o <= `NOPREGADDR;
             reg2_addr_o <= `NOPREGADDR;
             imm <= `ZEROWORD;
+				link_addr_o <= `ZEROWORD;
+				jmp_target_address_o <= `ZEROWORD;
+				jmp_flag_o <= `NOJMP;
+				next_inst_in_delayslot_o <= `NOTINDELAYSLOT;
         end else begin 
             aluop_o <= `EXE_NOP_OP;
             alusel_o <= `EXE_RES_NOP;
@@ -66,11 +86,13 @@ module id(
             reg1_addr_o <= rs;
             reg2_addr_o <= rt;
             imm <= `ZEROWORD;
+				link_addr_o <= `ZEROWORD;
+				jmp_target_address_o <= `ZEROWORD;
+				jmp_flag_o <= `NOJMP;
+				next_inst_in_delayslot_o <= `NOTINDELAYSLOT;
 
             case (op)
 					`EXE_SPECIAL: begin
-//						case (sa)
-//							`NOPREGADDR: begin
 								case (func)
 								   //LOGIC
 									`EXE_OR: begin
@@ -310,17 +332,40 @@ module id(
 										reg2_read_o <= `READENABLE;
 										instvalid <= `INSTVALID;
 									end
+									//JMP
+									`EXE_JR: begin
+										wreg_o	<= `WRITEDISABLE;
+										aluop_o	<= `EXE_JR_OP;
+										alusel_o <= `EXE_RES_JUMP;
+										reg1_read_o <= `READENABLE;
+										reg2_read_o <= `READDISABLE;
+										instvalid <= `INSTVALID;
+										
+										jmp_target_address_o <= reg1_o;
+										jmp_flag_o <= `JMP;
+										next_inst_in_delayslot_o <= `INDELAYSLOT;
+									end
+									
+									`EXE_JALR: begin
+										wreg_o <= `WRITEENABLE;
+										aluop_o <= `EXE_JALR_OP;
+										alusel_o <= `EXE_RES_JUMP;
+										reg1_read_o <= `READENABLE;
+										reg2_read_o <= `READDISABLE;
+										wd_o <= rd;
+										instvalid <= `INSTVALID;
+										
+										link_addr_o <= pc_plus_8;
+										jmp_target_address_o <= reg1_o;
+										jmp_flag_o <= `JMP;
+										next_inst_in_delayslot_o <= `INDELAYSLOT;
+									end
+										
 									
 									default: begin
 									end
 									
 								endcase
-//							end
-							
-//							default: begin
-//							end
-							
-//						endcase
 					end
 					//LOGIC
                `EXE_ORI: begin
@@ -419,6 +464,158 @@ module id(
 						  wd_o <= rt;
 						  instvalid <= `INSTVALID;
 					 end
+					 //JMP
+					 `EXE_J: begin
+						  wreg_o <= `WRITEDISABLE;
+						  aluop_o <= `EXE_J_OP;
+						  alusel_o <= `EXE_RES_JUMP;
+						  reg1_read_o <= `READDISABLE;
+						  reg2_read_o <= `READDISABLE;
+						  instvalid <= `INSTVALID;
+						  
+						  jmp_flag_o <= `JMP;
+						  next_inst_in_delayslot_o <= `INSTVALID;
+						  jmp_target_address_o <= {pc_plus_4[31:28], inst_i[25:0], 2'b00};
+					 end
+					 
+					 `EXE_JAL: begin
+						  wreg_o <= `WRITEENABLE;
+						  aluop_o <= `EXE_JAL_OP;
+						  alusel_o	<= `EXE_RES_JUMP;
+						  reg1_read_o	<= `READDISABLE;
+						  reg2_read_o  <= `READDISABLE;
+						  wd_o <= 5'b11111;
+						  instvalid <= `INSTVALID;
+						  
+						  link_addr_o <= pc_plus_8;
+						  jmp_flag_o  <= `JMP;
+						  jmp_target_address_o <= {pc_plus_4[31:28], inst_i[25:0], 2'b00};
+						  next_inst_in_delayslot_o <= `INDELAYSLOT;
+					end
+					
+					`EXE_BEQ: begin
+						  wreg_o <= `WRITEDISABLE;
+						  aluop_o <= `EXE_BEQ_OP;
+						  alusel_o <= `EXE_RES_JUMP;
+						  reg1_read_o <= `READENABLE;
+						  reg2_read_o <= `READDISABLE;
+						  instvalid <= `INSTVALID;
+						  if (reg1_o == reg2_o) begin
+								jmp_target_address_o <= pc_plus_4 + imm_sll2_signedext;
+								jmp_flag_o <= `JMP;
+								next_inst_in_delayslot_o <= `INDELAYSLOT;
+						  end
+					end
+					
+					`EXE_BGTZ: begin
+						  wreg_o <= `WRITEDISABLE;
+						  aluop_o <= `EXE_BGTZ_OP;
+						  alusel_o <= `EXE_RES_JUMP;
+						  reg1_read_o <= `READENABLE;
+						  reg2_read_o <= `READDISABLE;
+						  instvalid <= `INSTVALID;
+						  if ((reg1_o[31]==1'b0)&&(reg1_o!=`ZEROWORD)) begin
+								jmp_target_address_o <= pc_plus_4 + imm_sll2_signedext;
+								jmp_flag_o <= `JMP;
+								next_inst_in_delayslot_o <= `INDELAYSLOT;
+						  end
+					end
+					
+					`EXE_BLEZ: begin
+						  wreg_o <= `WRITEDISABLE;
+						  aluop_o <= `EXE_BLEZ_OP;
+						  alusel_o <= `EXE_RES_JUMP;
+						  reg1_read_o <= `READENABLE;
+						  reg2_read_o <= `READDISABLE;
+						  instvalid <= `INSTVALID;
+						  if ((reg1_o[31]==1'b1)||(reg1_o ==`ZEROWORD)) begin
+								jmp_target_address_o <= pc_plus_4 + imm_sll2_signedext;
+								jmp_flag_o <= `JMP;
+								next_inst_in_delayslot_o <= `INDELAYSLOT;
+						  end
+					end
+					
+					`EXE_BNE: begin
+						  wreg_o <= `WRITEDISABLE;
+						  aluop_o <= `EXE_BNE_OP;
+						  alusel_o <= `EXE_RES_JUMP;
+						  reg1_read_o <= `READENABLE;
+						  reg2_read_o <= `READDISABLE;
+						  instvalid <= `INSTVALID;
+						  if (reg1_o != reg2_o) begin
+								jmp_target_address_o <= pc_plus_4 + imm_sll2_signedext;
+								jmp_flag_o <= `JMP;
+								next_inst_in_delayslot_o <= `INDELAYSLOT;
+						  end
+					end
+					
+					`EXE_REGIMM: begin
+						  case (rt)
+								`EXE_BGEZ: begin
+									wreg_o <= `WRITEDISABLE;
+									aluop_o <= `EXE_BGEZ_OP;
+									alusel_o <= `EXE_RES_JUMP;
+									reg1_read_o <= `READENABLE;
+									reg2_read_o <= `READDISABLE;
+									instvalid <= `INSTVALID;
+								   if (reg1_o[31]==1'b0) begin
+										jmp_target_address_o <= pc_plus_4 + imm_sll2_signedext;
+										jmp_flag_o <= `JMP;
+										next_inst_in_delayslot_o <= `INDELAYSLOT;
+								   end
+								end
+								
+								`EXE_BGEZAL: begin
+									wreg_o <= `WRITEENABLE;
+									aluop_o <= `EXE_BGEZAL_OP;
+									alusel_o <= `EXE_RES_JUMP;
+									reg1_read_o <= `READENABLE;
+									reg2_read_o <= `READDISABLE;
+									wd_o <= 5'b11111;
+									instvalid <= `INSTVALID;
+									link_addr_o <= pc_plus_8; 
+								   if (reg1_o[31]==1'b0) begin
+										jmp_target_address_o <= pc_plus_4 + imm_sll2_signedext;
+										jmp_flag_o <= `JMP;
+										next_inst_in_delayslot_o <= `INDELAYSLOT;
+								   end
+								end
+								
+								`EXE_BLTZ: begin
+									wreg_o <= `WRITEDISABLE;
+									aluop_o <= `EXE_BLTZ_OP;
+									alusel_o <= `EXE_RES_JUMP;
+									reg1_read_o <= `READENABLE;
+									reg2_read_o <= `READDISABLE;
+									instvalid <= `INSTVALID;
+								   if (reg1_o[31]==1'b1) begin
+										jmp_target_address_o <= pc_plus_4 + imm_sll2_signedext;
+										jmp_flag_o <= `JMP;
+										next_inst_in_delayslot_o <= `INDELAYSLOT;
+								   end
+								end
+								
+								`EXE_BLTZAL: begin
+									wreg_o <= `WRITEENABLE;
+									aluop_o <= `EXE_BLTZAL_OP;
+									alusel_o <= `EXE_RES_JUMP;
+									reg1_read_o <= `READENABLE;
+									reg2_read_o <= `READDISABLE;
+									wd_o <= 5'b11111;
+									link_addr_o <= pc_plus_8; 
+									instvalid <= `INSTVALID;
+								   if (reg1_o[31]==1'b0) begin
+										jmp_target_address_o <= pc_plus_4 + imm_sll2_signedext;
+										jmp_flag_o <= `JMP;
+										next_inst_in_delayslot_o <= `INDELAYSLOT;
+								   end
+								end
+								
+								default: begin
+								end
+						  endcase
+					  end
+						  
 					 
 					 `EXE_SPECIAL2: begin
 							case(func)
@@ -533,5 +730,14 @@ module id(
             reg2_o <= `ZEROWORD;
         end 
     end
+	 
+	 
+	 always @(*) begin
+		  if (rst == `RSTENABLE) begin
+			   is_in_delayslot_o <= `NOTINDELAYSLOT;
+		  end else begin	
+				is_in_delayslot_o <= is_in_delayslot_i;
+		  end
+	 end
 
 endmodule

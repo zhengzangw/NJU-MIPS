@@ -31,7 +31,10 @@ module ex(
 	 output reg[`DOUBLEREGBUS] hilo_temp_o,
 	 output reg[1:0] cnt_o,
 	 
-	 output reg  stallreq
+	 output reg  stallreq,
+	 
+	 input wire[`REGBUS] link_address_i,
+	 input wire	is_in_delayslot_i
 );
 
     reg[`REGBUS] logicout;
@@ -308,6 +311,10 @@ module ex(
 				
 				`EXE_RES_ARITH: begin
 					wdata_o <= arithres;
+				end
+				
+				`EXE_RES_JUMP: begin
+					wdata_o <= link_address_i;
 				end
 				
             default: begin
