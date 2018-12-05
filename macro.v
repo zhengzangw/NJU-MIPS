@@ -94,6 +94,9 @@
 `define	 EXE_MULT		 6'b011000
 `define	 EXE_MULTU		 6'b011001
 
+`define   EXE_DIV			 6'b011010
+`define	 EXE_DIVU		 6'b011011
+
 `define	 EXE_J			 6'b000010
 `define	 EXE_JAL			 6'b000011
 `define	 EXE_JALR		 6'b001001
@@ -180,6 +183,17 @@
 `define	 EXE_RES_ARITH	 3'b100
 `define   EXE_RES_JUMP   3'b101
 `define   EXE_RES_NOP    3'b000
+
+
+//***** DIV *****
+`define DIVFREE 2'b00
+`define DIVBYZERO 2'b01
+`define DIVON 2'b10
+`define DIVEND 2'b11
+`define DIVRESULTREADY 1'b1
+`define DIVRESULTNOTREADY 1'b0
+`define DIVSTART 1'b1
+`define DIVSTOP 1'b0
 
 
 //***** FILE *****

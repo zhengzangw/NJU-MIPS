@@ -332,6 +332,22 @@ module id(
 										reg2_read_o <= `READENABLE;
 										instvalid <= `INSTVALID;
 									end
+									
+									`EXE_DIV: begin
+										wreg_o <= `WRITEDISABLE;
+										aluop_o <= `EXE_DIV_OP;
+										reg1_read_o <= `READENABLE;
+										reg2_read_o <= `READENABLE;
+										instvalid <= `INSTVALID;
+									end
+									
+									`EXE_DIVU: begin
+										wreg_o <= `WRITEDISABLE;
+										aluop_o <= `EXE_DIVU_OP;
+										reg1_read_o <= `READENABLE;
+										reg2_read_o <= `READENABLE;
+										instvalid <= `INSTVALID;
+									end
 									//JMP
 									`EXE_JR: begin
 										wreg_o	<= `WRITEDISABLE;
@@ -498,7 +514,7 @@ module id(
 						  aluop_o <= `EXE_BEQ_OP;
 						  alusel_o <= `EXE_RES_JUMP;
 						  reg1_read_o <= `READENABLE;
-						  reg2_read_o <= `READDISABLE;
+						  reg2_read_o <= `READENABLE;
 						  instvalid <= `INSTVALID;
 						  if (reg1_o == reg2_o) begin
 								jmp_target_address_o <= pc_plus_4 + imm_sll2_signedext;
@@ -540,7 +556,7 @@ module id(
 						  aluop_o <= `EXE_BNE_OP;
 						  alusel_o <= `EXE_RES_JUMP;
 						  reg1_read_o <= `READENABLE;
-						  reg2_read_o <= `READDISABLE;
+						  reg2_read_o <= `READENABLE;
 						  instvalid <= `INSTVALID;
 						  if (reg1_o != reg2_o) begin
 								jmp_target_address_o <= pc_plus_4 + imm_sll2_signedext;
@@ -604,7 +620,7 @@ module id(
 									wd_o <= 5'b11111;
 									link_addr_o <= pc_plus_8; 
 									instvalid <= `INSTVALID;
-								   if (reg1_o[31]==1'b0) begin
+								   if (reg1_o[31]==1'b1) begin
 										jmp_target_address_o <= pc_plus_4 + imm_sll2_signedext;
 										jmp_flag_o <= `JMP;
 										next_inst_in_delayslot_o <= `INDELAYSLOT;
