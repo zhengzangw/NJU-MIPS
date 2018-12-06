@@ -12,6 +12,7 @@ module id(
     input wire ex_wreg_i,
     input wire[`REGBUS] ex_wdata_i,
     input wire[`REGADDRBUS] ex_wd_i,
+	 input wire[`ALUOPBUS] ex_aluop_i,
     // Data from Writeback
     input wire mem_wreg_i,
     input wire[`REGBUS] mem_wdata_i,
@@ -38,7 +39,9 @@ module id(
 	 output reg[`REGBUS] link_addr_o,
 	 output reg	is_in_delayslot_o,
 	 
-	 output wire stallreq
+	 output wire stallreq,
+	 
+	 output wire[`REGBUS] inst_o
 );
 
     wire[5:0] op = inst_i[31:26]; //Instruction Code
@@ -47,6 +50,7 @@ module id(
     wire[4:0] rt = inst_i[20:16]; //rt
 	 wire[4:0] rs = inst_i[25:21]; //rs
 	 wire[4:0] rd = inst_i[15:11]; //rd
+	 assign inst_o = inst_i;
     reg[`REGBUS] imm;
     reg instvalid;
 	 
@@ -57,7 +61,20 @@ module id(
 	 assign pc_plus_4 = pc_i + 4;
 	 assign imm_sll2_signedext = {{14{inst_i[15]}}, inst_i[15:0], 2'b00 };
 	 
-	 assign stallreq = `NOSTOP;
+	 reg stallreq_for_reg1_loadrelate;
+	 reg stallreq_for_reg2_loadrelate;
+	 wire pre_inst_is_load;
+	 assign stallreq = stallreq_for_reg1_loadrelate | stallreq_for_reg2_loadrelate;
+	 assign pre_inst_is_load = (
+											(ex_aluop_i == `EXE_LBU_OP)||
+											(ex_aluop_i == `EXE_LH_OP) ||
+											(ex_aluop_i == `EXE_LHU_OP)||
+											(ex_aluop_i == `EXE_LW_OP) ||
+											(ex_aluop_i == `EXE_LWR_OP)||
+											(ex_aluop_i == `EXE_LWL_OP)||
+											(ex_aluop_i == `EXE_LL_OP) ||
+											(ex_aluop_i == `EXE_SC_OP)
+										) ? 1'b1 : 1'b0;
 
     always @(*) begin
         if (rst==`RSTENABLE) begin 
@@ -376,7 +393,6 @@ module id(
 										jmp_flag_o <= `JMP;
 										next_inst_in_delayslot_o <= `INDELAYSLOT;
 									end
-										
 									
 									default: begin
 									end
@@ -631,7 +647,122 @@ module id(
 								end
 						  endcase
 					  end
-						  
+					
+					  //LOAD
+					`EXE_LB: begin
+						wreg_o <= `WRITEENABLE;
+						aluop_o <= `EXE_LB_OP;
+						alusel_o <= `EXE_RES_LS;
+						reg1_read_o <= `READENABLE;
+						reg2_read_o <= `READDISABLE;
+						wd_o <= rt;
+						instvalid <= `INSTVALID;
+					end
+					
+					`EXE_LBU: begin
+						wreg_o <= `WRITEENABLE;
+						aluop_o <= `EXE_LBU_OP;
+						alusel_o <= `EXE_RES_LS;
+						reg1_read_o <= `READENABLE;
+						reg2_read_o <= `READDISABLE;
+						wd_o <= rt;
+						instvalid <= `INSTVALID;
+					end
+					
+					`EXE_LH: begin
+						wreg_o <= `WRITEENABLE;
+						aluop_o <= `EXE_LH_OP;
+						alusel_o <= `EXE_RES_LS;
+						reg1_read_o <= `READENABLE;
+						reg2_read_o <= `READDISABLE;
+						wd_o <= rt;
+						instvalid <= `INSTVALID;
+					end
+					
+					`EXE_LHU: begin
+						wreg_o <= `WRITEENABLE;
+						aluop_o <= `EXE_LHU_OP;
+						alusel_o <= `EXE_RES_LS;
+						reg1_read_o <= `READENABLE;
+						reg2_read_o <= `READDISABLE;
+						wd_o <= rt;
+						instvalid <= `INSTVALID;
+					end
+					
+					`EXE_LW: begin
+						wreg_o <= `WRITEENABLE;
+						aluop_o <= `EXE_LW_OP;
+						alusel_o <= `EXE_RES_LS;
+						reg1_read_o <= `READENABLE;
+						reg2_read_o <= `READDISABLE;
+						wd_o <= rt;
+						instvalid <= `INSTVALID;
+					end
+					
+					`EXE_LWL: begin
+						wreg_o <= `WRITEENABLE;
+						aluop_o <= `EXE_LWL_OP;
+						alusel_o <= `EXE_RES_LS;
+						reg1_read_o <= `READENABLE;
+						reg2_read_o <= `READENABLE;
+						wd_o <= rt;
+						instvalid <= `INSTVALID;
+					end
+					
+					`EXE_LWR: begin
+						wreg_o <= `WRITEENABLE;
+						aluop_o <= `EXE_LWR_OP;
+						alusel_o <= `EXE_RES_LS;
+						reg1_read_o <= `READENABLE;
+						reg2_read_o <= `READENABLE;
+						wd_o <= rt;
+						instvalid <= `INSTVALID;
+					end
+					//STORE
+					`EXE_SB: begin
+						wreg_o <= `WRITEDISABLE;
+						aluop_o <= `EXE_SB_OP;
+						alusel_o <= `EXE_RES_LS;
+						reg1_read_o <= `READENABLE;
+						reg2_read_o <= `READENABLE;
+						instvalid <= `INSTVALID;
+					end
+					
+					`EXE_SH: begin
+						wreg_o <= `WRITEDISABLE;
+						aluop_o <= `EXE_SH_OP;
+						alusel_o <= `EXE_RES_LS;
+						reg1_read_o <= `READENABLE;
+						reg2_read_o <= `READENABLE;
+						instvalid <= `INSTVALID;
+					end
+					
+					`EXE_SW: begin
+						wreg_o <= `WRITEDISABLE;
+						aluop_o <= `EXE_SW_OP;
+						alusel_o <= `EXE_RES_LS;
+						reg1_read_o <= `READENABLE;
+						reg2_read_o <= `READENABLE;
+						instvalid <= `INSTVALID;
+					end
+					
+					`EXE_SWL: begin
+						wreg_o <= `WRITEDISABLE;
+						aluop_o <= `EXE_SWL_OP;
+						alusel_o <= `EXE_RES_LS;
+						reg1_read_o <= `READENABLE;
+						reg2_read_o <= `READENABLE;
+						instvalid <= `INSTVALID;
+					end
+					
+					`EXE_SWR: begin
+						wreg_o <= `WRITEDISABLE;
+						aluop_o <= `EXE_SWR_OP;
+						alusel_o <= `EXE_RES_LS;
+						reg1_read_o <= `READENABLE;
+						reg2_read_o <= `READENABLE;
+						instvalid <= `INSTVALID;
+					end
 					 
 					 `EXE_SPECIAL2: begin
 							case(func)
@@ -713,9 +844,13 @@ module id(
 
 
     always @(*) begin
+		  stallreq_for_reg1_loadrelate <= `NOSTOP;
         if (rst==`RSTENABLE) begin
             reg1_o <= `ZEROWORD;
         // Data Hazzard
+		  end else if ( pre_inst_is_load == 1'b1 && ex_wd_i == reg1_addr_o
+							 && reg1_read_o == 1'b1 ) begin
+				stallreq_for_reg1_loadrelate <= `STOP;
         end else if ((reg1_read_o==`READENABLE)&&(ex_wreg_i==`WRITEENABLE)&&(ex_wd_i==reg1_addr_o)) begin
             reg1_o <= ex_wdata_i;
         end else if ((reg1_read_o==`READENABLE)&&(mem_wreg_i==`WRITEENABLE)&&(mem_wd_i==reg1_addr_o)) begin
@@ -731,9 +866,13 @@ module id(
 
 
     always @(*) begin
+		  stallreq_for_reg2_loadrelate <= `NOSTOP;
         if (rst==`RSTENABLE) begin
             reg2_o <= `ZEROWORD;
         // Data Hazzard
+		  end else if ( pre_inst_is_load == 1'b1 && ex_wd_i == reg2_addr_o
+							 && reg2_read_o == 1'b1 ) begin
+				stallreq_for_reg2_loadrelate <= `STOP;
         end else if ((reg2_read_o==`READENABLE)&&(ex_wreg_i==`WRITEENABLE)&&(ex_wd_i==reg2_addr_o)) begin
             reg2_o <= ex_wdata_i;
         end else if ((reg2_read_o==`READENABLE)&&(mem_wreg_i==`WRITEENABLE)&&(mem_wd_i==reg2_addr_o)) begin

@@ -6,14 +6,22 @@ module NJU_MIPS(
     input wire[`REGBUS] rom_data_i,
     output wire[`REGBUS] rom_addr_o,
     output wire  rom_ce_o,
+	 
+	 input wire[`REGBUS] ram_data_i,
+	 output wire[`REGBUS] ram_addr_o,
+	 output wire[`REGBUS] ram_data_o,
+	 output wire	ram_we_o,
+	 output wire[3:0] ram_sel_o,
+	 output wire	ram_ce_o,
+	 
 	 //DEBUG
 	 output wire[9:0] debug
 );
-	 //pc_reg - id_ex
+	 //pc_reg - pc-id
     wire[`INSTADDRBUS] pc;
     wire[`INSTADDRBUS] id_pc_i;
     wire[`INSTBUS] id_inst_i;
-	 //id_ex - id
+	 //pc-id - id
     wire[`ALUOPBUS] id_aluop_o;
     wire[`ALUSELBUS] id_alusel_o;
     wire[`REGBUS] id_reg1_o;
@@ -22,6 +30,7 @@ module NJU_MIPS(
     wire[`REGADDRBUS] id_wd_o;
 	 wire id_is_in_delayslot_o;
 	 wire[`REGBUS] id_link_address_o;
+	 wire[`REGBUS] id_inst_o;
 	 //id_ex - ex
     wire[`ALUOPBUS] ex_aluop_i;
     wire[`ALUSELBUS]ex_alusel_i;
@@ -31,6 +40,7 @@ module NJU_MIPS(
     wire[`REGADDRBUS] ex_wd_i;
 	 wire ex_is_in_delayslot_i;
 	 wire[`REGBUS] ex_link_address_i;
+	 wire[`REGBUS] ex_inst_i;
 	 //ex - ex_mem
     wire ex_wreg_o;
     wire[`REGADDRBUS] ex_wd_o;
@@ -38,6 +48,10 @@ module NJU_MIPS(
 	 wire[`REGBUS] ex_hi_o;
 	 wire[`REGBUS] ex_lo_o;
 	 wire ex_whilo_o;
+	 wire[`ALUOPBUS] ex_aluop_o;
+	 wire[`REGBUS] ex_mem_addr_o;
+	 wire[`REGBUS] ex_reg1_o;
+	 wire[`REGBUS] ex_reg2_o;
 	 //ex_mem - mem
     wire mem_wreg_i;
     wire[`REGADDRBUS] mem_wd_i;
@@ -45,6 +59,10 @@ module NJU_MIPS(
 	 wire[`REGBUS] mem_hi_i;
 	 wire[`REGBUS] mem_lo_i;
 	 wire mem_whilo_i;
+	 wire[`ALUOPBUS] mem_aluop_i;
+	 wire[`REGBUS] mem_mem_addr_i;
+	 wire[`REGBUS] mem_reg1_i;
+	 wire[`REGBUS] mem_reg2_i;
 	 //mem - mem_wb
     wire mem_wreg_o;
     wire[`REGADDRBUS] mem_wd_o;
@@ -116,6 +134,7 @@ module NJU_MIPS(
         .aluop_o(id_aluop_o), .alusel_o(id_alusel_o),
         .reg1_o(id_reg1_o), .reg2_o(id_reg2_o),
         .wd_o(id_wd_o), .wreg_o(id_wreg_o),
+		  .inst_o(id_inst_o),
         //Hazard
         .ex_wreg_i(ex_wreg_o),
         .ex_wdata_i(ex_wdata_o),
@@ -124,6 +143,7 @@ module NJU_MIPS(
         .mem_wdata_i(mem_wdata_o),
         .mem_wd_i(mem_wd_o),
 		  .stallreq(stallreq_id),
+		  .ex_aluop_i(ex_aluop_o),
 		  
 		  .is_in_delayslot_i(is_in_delayslot_i),
 		  .next_inst_in_delayslot_o(next_inst_in_delayslot_o),
@@ -151,14 +171,15 @@ module NJU_MIPS(
         .ex_aluop(ex_aluop_i), .ex_alusel(ex_alusel_i),
         .ex_reg1(ex_reg1_i), .ex_reg2(ex_reg2_i),
         .ex_wd(ex_wd_i), .ex_wreg(ex_wreg_i),
-		  .stall(stall),
+		  .stall(stall), .id_inst(id_inst_o),
 		  
 		  .id_link_address(id_link_address_o),
 		  .id_is_in_delayslot(id_is_in_delayslot_o),
 		  .next_inst_in_delayslot_i(next_inst_in_delayslot_o),
 		  .ex_link_address(ex_link_address_i),
   	     .ex_is_in_delayslot(ex_is_in_delayslot_i),
-		  .is_in_delayslot_o(is_in_delayslot_i)
+		  .is_in_delayslot_o(is_in_delayslot_i),
+		  .ex_inst(ex_inst_i)
     );
 
     ex ex0(
@@ -166,6 +187,7 @@ module NJU_MIPS(
         .aluop_i(ex_aluop_i), .alusel_i(ex_alusel_i),
         .reg1_i(ex_reg1_i), .reg2_i(ex_reg2_i),
         .wd_i(ex_wd_i), .wreg_i(ex_wreg_i),
+		  .inst_i(ex_inst_i),
 		  
         .wd_o(ex_wd_o), .wreg_o(ex_wreg_o),
         .wdata_o(ex_wdata_o),
@@ -193,7 +215,11 @@ module NJU_MIPS(
 		  .div_opdata1_o(div_opdata1),
 		  .div_opdata2_o(div_opdata2),
 		  .div_start_o(div_start),
-		  .signed_div_o(signed_div)
+		  .signed_div_o(signed_div),
+		  
+		  .aluop_o(ex_aluop_o),
+		  .mem_addr_o(ex_mem_addr_o),
+		  .reg2_o(ex_reg2_o)
     );
 
     ex_mem ex_mem0(
@@ -202,11 +228,18 @@ module NJU_MIPS(
         .ex_wdata(ex_wdata_o),
         .mem_wd(mem_wd_i), .mem_wreg(mem_wreg_i),
         .mem_wdata(mem_wdata_i),
+		  .ex_aluop(ex_aluop_o),
+		  .ex_mem_addr(ex_mem_addr_o),
+		  .ex_reg2(ex_reg2_o),
 		  
 		  .ex_hi(ex_hi_o), .ex_lo(ex_lo_o),
 		  .ex_whilo(ex_whilo_o),
 		  .mem_hi(mem_hi_i), .mem_lo(mem_lo_i),
 		  .mem_whilo(mem_whilo_i),
+		  
+		  .mem_aluop(mem_aluop_i),
+		  .mem_mem_addr(mem_mem_addr_i),
+		  .mem_reg2(mem_reg2_i),
 		  
 		  .stall(stall),
 		  .hilo_i(hilo_temp_o),
@@ -225,7 +258,18 @@ module NJU_MIPS(
         .wd_o(mem_wd_o), .wreg_o(mem_wreg_o),
         .wdata_o(mem_wdata_o),
 		  
-		  .hi_o(mem_hi_o), .lo_o(mem_lo_o), .whilo_o(mem_whilo_o)
+		  .hi_o(mem_hi_o), .lo_o(mem_lo_o), .whilo_o(mem_whilo_o),
+		  
+		  .mem_data_i(ram_data_i),
+		  .mem_addr_o(ram_addr_o),
+		  .mem_we_o(ram_we_o),
+		  .mem_sel_o(ram_sel_o),
+		  .mem_data_o(ram_data_o),
+		  .mem_ce_o(ram_ce_o),
+		  
+		  .aluop_i(mem_aluop_i),
+		  .mem_addr_i(mem_mem_addr_i),
+		  .reg2_i(mem_reg2_i)
     );
 
     mem_wb mem_wb0(

@@ -8,6 +8,7 @@ module ex(
     input wire[`REGBUS]  reg2_i,
     input wire[`REGADDRBUS]  wd_i,
     input wire  wreg_i,
+	 input wire[`REGBUS]	 inst_i,
 
     output reg[`REGADDRBUS]  wd_o,
     output reg  wreg_o,
@@ -39,6 +40,9 @@ module ex(
 	 output reg                signed_div_o,
 	 
 	 output reg  stallreq,
+	 output wire[`ALUOPBUS]		aluop_o,
+	 output wire[`REGBUS]		mem_addr_o,
+	 output wire[`REGBUS]		reg2_o,
 	 
 	 input wire[`REGBUS] link_address_i,
 	 input wire	is_in_delayslot_i
@@ -66,6 +70,9 @@ module ex(
 	 
 	 reg  stallreq_for_madd_msub;
 	 
+	 assign aluop_o = aluop_i;
+	 assign mem_addr_o = reg1_i + {{16{inst_i[15]}},inst_i[15:0]};
+	 assign reg2_o = reg2_i;
 	 
 	 //HI LO
 	 always @(*) begin

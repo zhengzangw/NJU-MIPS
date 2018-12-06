@@ -25,9 +25,9 @@ module mem_wb(
             wb_wd <= `NOPREGADDR;
             wb_wreg <= `WRITEDISABLE;
             wb_wdata <= `ZEROWORD;
-			wb_hi <= `ZEROWORD;
-			wb_lo <= `ZEROWORD;
-			wb_whilo <= `WRITEDISABLE;
+				wb_hi <= `ZEROWORD;
+				wb_lo <= `ZEROWORD;
+				wb_whilo <= `WRITEDISABLE;
         end else if (stall[4] == `STOP && stall[5] == `NOSTOP) begin
             wb_wd <= `NOPREGADDR;
             wb_wreg <= `WRITEDISABLE;

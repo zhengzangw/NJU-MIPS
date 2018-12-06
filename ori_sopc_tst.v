@@ -1,5 +1,5 @@
 `include "macro.v"
-`timescale 1ns/1ps
+`timescale 10ns/10ps
 
 module ori_sopc_tst();
 reg CLOCK_50;
@@ -13,7 +13,7 @@ end
 initial begin
     rst = `RSTENABLE;
     #195 rst = `RSTDISABLE;
-    #5000 $stop;
+    #8000 $stop;
 end
 
 initial begin

@@ -10,6 +10,10 @@ module ex_mem(
 	 input wire[`REGBUS]		  ex_hi,
 	 input wire[`REGBUS]	     ex_lo,
 	 input wire					  ex_whilo,
+	 
+	 input wire[`ALUOPBUS]	  ex_aluop,
+	 input wire[`REGBUS]	 	  ex_mem_addr,
+	 input wire[`REGBUS]		  ex_reg2,
 
     input wire[5:0]          stall,
 	 
@@ -24,7 +28,11 @@ module ex_mem(
 	 output reg[`REGBUS]		  mem_whilo,
 	 
 	 output reg[`DOUBLEREGBUS] hilo_o,
-	 output reg[1:0]			  cnt_o
+	 output reg[1:0]			  cnt_o,
+	 
+	 output reg[`ALUOPBUS]	  mem_aluop,
+	 output reg[`REGBUS]		  mem_mem_addr,
+	 output reg[`REGBUS]		  mem_reg2
 );
 
     always @(posedge clk) begin
@@ -32,11 +40,14 @@ module ex_mem(
             mem_wd <= `NOPREGADDR;
             mem_wreg <= `WRITEDISABLE;
             mem_wdata <= `ZEROWORD;
-			mem_hi <= `ZEROWORD;
-			mem_lo <= `ZEROWORD;
-			mem_whilo <= `WRITEDISABLE;
-			hilo_o <= {`ZEROWORD, `ZEROWORD};
-			cnt_o <= 2'b00;
+				mem_hi <= `ZEROWORD;
+				mem_lo <= `ZEROWORD;
+				mem_whilo <= `WRITEDISABLE;
+				mem_aluop <= `EXE_NOP_OP;
+				mem_mem_addr <= `ZEROWORD;
+				mem_reg2 <= `ZEROWORD;
+				hilo_o <= {`ZEROWORD, `ZEROWORD};
+				cnt_o <= 2'b00;
         end else if (stall[3] == `STOP && stall[4] == `NOSTOP) begin
             mem_wd <= `NOPREGADDR;
             mem_wreg <= `WRITEDISABLE;
@@ -44,6 +55,9 @@ module ex_mem(
 				mem_hi <= `ZEROWORD;
 				mem_lo <= `ZEROWORD;
 				mem_whilo <= `WRITEDISABLE;
+				mem_aluop <= `EXE_NOP_OP;
+				mem_mem_addr <= `ZEROWORD;
+				mem_reg2 <= `ZEROWORD;
 				hilo_o <= hilo_i;
 				cnt_o <= cnt_i;
         end else if (stall[3] == `NOSTOP) begin
@@ -53,6 +67,9 @@ module ex_mem(
 				mem_hi <= ex_hi;
 				mem_lo <= ex_lo;
 				mem_whilo <= ex_whilo;
+				mem_aluop <= ex_aluop;
+				mem_mem_addr <= ex_mem_addr;
+				mem_reg2 <= ex_reg2;
 				hilo_o <= {`ZEROWORD, `ZEROWORD};
 				cnt_o <= 2'b00;
         end else begin
