@@ -23,8 +23,8 @@ module vga_ctrl(
 	parameter v_backporch = 515;
 	parameter v_total = 525;
 	
-	reg [9:0] x_cnt;
-	reg [9:0] y_cnt;
+	reg [9:0] x_cnt = 0;
+	reg [9:0] y_cnt = 0;
 	wire h_valid;
 	wire v_valid;
 	

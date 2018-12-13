@@ -25,12 +25,7 @@ module mem(
 	 output reg[`REGBUS]  lo_o,
 	 output reg				 whilo_o,
 	 
-	 //To RAM
-	 output reg[`REGBUS]  mem_addr_o,
-	 output wire			 mem_we_o,
-	 output reg[3:0]		 mem_sel_o,
-	 output reg[`REGBUS]  mem_data_o,
-	 output reg		 		 mem_ce_o
+	 
 );
 
 	 wire[`REGBUS] zero32;

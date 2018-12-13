@@ -45,7 +45,14 @@ module ex(
 	 output wire[`REGBUS]		reg2_o,
 	 
 	 input wire[`REGBUS] link_address_i,
-	 input wire	is_in_delayslot_i
+	 input wire	is_in_delayslot_i,
+	 
+	 //To RAM
+	 output reg[`REGBUS]  mem_addr_o,
+	 output wire			 mem_we_o,
+	 output reg[3:0]		 mem_sel_o,
+	 output reg[`REGBUS]  mem_data_o,
+	 output reg		 		 mem_ce_o
 );
 
     reg[`REGBUS] logicout;
@@ -441,5 +448,119 @@ module ex(
 	always @(*) begin
 		stallreq = stallreq_for_madd_msub || stallreq_for_div;
 	end
+	
+	always @(*) begin
+        if (rst == `RSTENABLE) begin
+				mem_addr_o <= `ZEROWORD;
+				mem_we <= `WRITEDISABLE;
+				mem_sel_o <= 4'b0000;
+				mem_data_o <= `ZEROWORD;
+				mem_ce_o <= `CHIPDISABLE;
+        end else begin
+				mem_addr_o <= `ZEROWORD;
+				mem_we <= `WRITEDISABLE;
+				mem_sel_o <= 4'b1111;
+				mem_data_o <= `ZEROWORD;
+				mem_ce_o <= `CHIPDISABLE;
+				case (aluop_i)
+					`EXE_LB_OP: begin
+						mem_addr_o <= mem_addr_i;
+						mem_we <= `WRITEDISABLE;
+						mem_ce_o <= `CHIPENABLE;
+						case (mem_addr_i[1:0])
+							2'b00: begin
+								mem_sel_o <= 4'b1000;
+							end
+							2'b01: begin
+								mem_sel_o <= 4'b0100;
+							end
+							2'b10: begin
+								mem_sel_o <= 4'b0010;
+							end
+							2'b11: begin
+								mem_sel_o <= 4'b0001;
+							end
+							default: begin
+								wdata_o <= `ZEROWORD;
+							end
+					  endcase
+				  end
+				  
+					 `EXE_LBU_OP: begin
+							mem_addr_o <= mem_addr_i;
+							mem_we <= `WRITEDISABLE;
+							mem_ce_o <= `CHIPENABLE;
+							case (mem_addr_i[1:0])
+								2'b00: begin
+									wdata_o <= {{24{1'b0}}, mem_data_i[31:24]};
+									mem_sel_o <= 4'b1000;
+								end
+								2'b01: begin
+									wdata_o <= {{24{1'b0}}, mem_data_i[23:16]};
+									mem_sel_o <= 4'b0100;
+								end
+								2'b10: begin
+									wdata_o <= {{24{1'b0}}, mem_data_i[15:8]};
+									mem_sel_o <= 4'b0010;
+								end
+								2'b11: begin
+									wdata_o <= {{24{1'b0}}, mem_data_i[7:0]};
+									mem_sel_o <= 4'b0001;
+								end
+								default: begin
+									wdata_o <= `ZEROWORD;
+								end
+						  endcase
+					  end
+					  
+					  `EXE_LH_OP: begin
+							mem_addr_o <= mem_addr_i;
+							mem_we <= `WRITEDISABLE;
+							mem_ce_o <= `CHIPENABLE;
+							case (mem_addr_i[1:0])
+								2'b00: begin
+									wdata_o <= {{16{mem_data_i[31]}}, mem_data_i[31:16]};
+									mem_sel_o <= 4'b1100;
+								end
+								2'b10: begin
+									wdata_o <= {{16{mem_data_i[15]}}, mem_data_i[15:0]};
+									mem_sel_o <= 4'b0011;
+								end
+								default: begin
+									wdata_o <= `ZEROWORD;
+								end
+						  endcase
+					  end
+					  
+					  `EXE_LHU_OP: begin
+							mem_addr_o <= mem_addr_i;
+							mem_we <= `WRITEDISABLE;
+							mem_ce_o <= `CHIPENABLE;
+							case (mem_addr_i[1:0])
+								2'b00: begin
+									wdata_o <= {{16{1'b0}}, mem_data_i[31:16]};
+									mem_sel_o <= 4'b1100;
+								end
+								2'b10: begin
+									wdata_o <= {{16{1'b0}}, mem_data_i[15:0]};
+									mem_sel_o <= 4'b0011;
+								end
+								default: begin
+									wdata_o <= `ZEROWORD;
+								end
+						  endcase
+					  end
+					  
+					  `EXE_LW_OP: begin
+						  mem_addr_o <= mem_addr_i;
+						  mem_we <= `WRITEDISABLE;
+						  wdata_o <= mem_data_i;
+						  mem_sel_o <= 4'b1111;
+						  mem_ce_o <= `CHIPENABLE;
+					  end
+				endcase
+        end
+    end
+	
 
 endmodule

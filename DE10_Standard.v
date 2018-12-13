@@ -100,15 +100,15 @@ module DE10_Standard(
 //  Structural coding
 //=======================================================
 
-wire [11:0] vga_raddress;
+wire [11:0] vga_rdaddress;
 wire [7:0]  vga_q;
 
-ori_sopc(
+ori_sopc cpu(
 	.CLOCK_50(CLOCK_50),
 	.rst(!KEY[0]),
 	.debug(LEDR),
-	.vag_q(vga_q),
-	.vag_raddress(vga_raddress)
+	.vga_q(vga_q),
+	.vga_rdaddress(vga_rdaddress)
 	);
 
 vga video_output(
@@ -122,7 +122,7 @@ vga video_output(
 	.VGA_SYNC_N(VGA_SYNC_N),
 	.VGA_VS(VGA_VS),
 	.q(vga_q),
-	.raddress(vga_raddress)
+	.rdaddress(vga_rdaddress)
 	);						 
 
 endmodule

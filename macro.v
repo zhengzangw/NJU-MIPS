@@ -2,6 +2,7 @@
 `define   RSTENABLE      1'b1
 `define   RSTDISABLE     1'b0
 `define   ZEROWORD       32'h00000000
+`define   ZEROBYTE		 8'h00
 `define   WRITEENABLE    1'b1
 `define   WRITEDISABLE   1'b0
 `define   READENABLE     1'b1
@@ -30,18 +31,18 @@
 `define DATAMEMNUMLOG2 14
 `define BYTEWIDTH 7:0
 
-//***** VISUAL RAM *****
+//***** GRAM *****
 `define VIDEOADDRBUS 31:0
 `define VIDEOBUS 31:0
-`define VIDEOMEMNUM 4095
-`define VIDEOMEMNUMLOG2 12
+`define VIDEOMEMNUM 1023
+`define VIDEOMEMNUMLOG2 10
 `define MMIO_GRAM_START 32'h004000
 `define MMIO_GRAM_END   32'h005000
 
 
 //***** ROM *****
-`define INSTNUM     511
-`define INSTNUMLOG2 11
+`define INSTNUM     1023
+`define INSTNUMLOG2 19
 `define INSTMEMNUM  4095
 `define INSTMEMNUMLOG2 13     
 `define MMIO_ROM_START 32'h000000

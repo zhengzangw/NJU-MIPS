@@ -2,8 +2,8 @@
 module ori_sopc(
     input wire CLOCK_50,
     input wire rst,
-	 output [7:0] vga_q,
-	 output [11:0] vga_rdaddress,
+	 //output [7:0] vga_q,
+	 //input [11:0] vga_rdaddress,
 	 
 	 //DEBUG
 	 output wire[9:0] debug
@@ -21,6 +21,8 @@ module ori_sopc(
 	 wire[`INSTADDRBUS] inst_addr;
     wire[`INSTBUS] inst;
     wire rom_ce;
+	 
+	 wire [`REGBUS] video_data_o;
 	 
 	 wire mmio_GRAM = (mem_addr_i >= `MMIO_GRAM_START) && (mem_addr_i < `MMIO_GRAM_END);
 	 wire mmio_ROM = (mem_addr_i >= `MMIO_ROM_START) && (mem_addr_i < `MMIO_ROM_END);
@@ -72,21 +74,37 @@ module ori_sopc(
 		.sel(mem_sel_i),
 		.we(no_mmio && mem_we_i),
 		.data_i(mem_data_i),
-		.data_o(mem_data_o)
+		.data_o(video_data_o)
 	 );
 	
-	 video_ram vm(
+	wire				  [7:0]		vga_q;
+	wire	        [11:0]    vga_rdaddress;
+	 video_ram video_ram0(
 		 .clk(CLOCK_50),
-		 .ce(ce),
+		 .ce(mem_ce_i),
 		 
-		 .addr(mem_addr_i),
+		 .addr(mem_addr_i - `MMIO_GRAM_START),
 		 .sel(mem_sel_i),
-		 .we(mmio_GRAM && mem_we),
+		 .we(mmio_GRAM && mem_we_i),
 		 .data_i(mem_data_i),
 		 .data_o(mem_data_o),
 		 
-		 .vga_raddress(vga_raddress),
+		 .vga_rdaddress(vga_rdaddress),
 		 .vga_q(vga_q)
 	 );
+	 
+	 vga video_output(
+	.CLOCK_50(CLOCK_50),
+	.VGA_BLANK_N(VGA_BLANK_N),
+	.VGA_B(VGA_B),
+	.VGA_CLK(VGA_CLK),
+	.VGA_G(VGA_G),
+	.VGA_HS(VGA_HS),
+	.VGA_R(VGA_R),
+	.VGA_SYNC_N(VGA_SYNC_N),
+	.VGA_VS(VGA_VS),
+	.q(vga_q),
+	.rdaddress(vga_rdaddress)
+	);			
 
 endmodule

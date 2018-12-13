@@ -25,7 +25,7 @@ module ex_mem(
     output reg[`REGBUS]      mem_wdata,
 	 output reg[`REGBUS]		  mem_hi,
 	 output reg[`REGBUS]		  mem_lo,
-	 output reg[`REGBUS]		  mem_whilo,
+	 output reg        		  mem_whilo,
 	 
 	 output reg[`DOUBLEREGBUS] hilo_o,
 	 output reg[1:0]			  cnt_o,

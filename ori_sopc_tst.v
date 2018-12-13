@@ -13,7 +13,7 @@ end
 initial begin
     rst = `RSTENABLE;
     #195 rst = `RSTDISABLE;
-    #8000 $stop;
+    #16000 $stop;
 end
 
 initial begin
@@ -21,9 +21,13 @@ initial begin
     $dumpall;
 end
 
+wire [`BYTEWIDTH] vga_q;
 ori_sopc ori_sopc0(
-    .clk(CLOCK_50),
-    .rst(rst)
+    .CLOCK_50(CLOCK_50),
+    .rst(rst),
+	 
+	 //DEBUG
+	 .debug()
 );
 
 endmodule
