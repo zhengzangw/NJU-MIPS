@@ -21,6 +21,8 @@
 `define	 INDELAYSLOT	 1'b1
 `define	 NOTINDELAYSLOT 1'b0
 
+`define MMIO_NO 32'h006000
+
 //***** RAM *****
 `define DATAADDRBUS 31:0
 `define DATABUS 31:0
@@ -28,13 +30,22 @@
 `define DATAMEMNUMLOG2 14
 `define BYTEWIDTH 7:0
 
+//***** VISUAL RAM *****
+`define VIDEOADDRBUS 31:0
+`define VIDEOBUS 31:0
+`define VIDEOMEMNUM 4095
+`define VIDEOMEMNUMLOG2 12
+`define MMIO_GRAM_START 32'h004000
+`define MMIO_GRAM_END   32'h005000
+
 
 //***** ROM *****
-`define   INSTMEMNUM     512
-`define   INSTMEMNUMLOG2 9
-
-
-//***** PC *****
+`define INSTNUM     511
+`define INSTNUMLOG2 11
+`define INSTMEMNUM  4095
+`define INSTMEMNUMLOG2 13     
+`define MMIO_ROM_START 32'h000000
+`define MMIO_ROM_END   32'h004000
 `define   INSTADDRBUS    31:0
 `define   INSTBUS    31:0
 
