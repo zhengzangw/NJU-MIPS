@@ -1,5 +1,5 @@
 # Introduction
-NJU_MIPS is course project for Experimemts in Digital Logit Circuits. It is a MIPS32 system.
+NJU_MIPS is course project for Experimemts in Digital Logit Circuits. It is a MIPS32 system with 5 levels pipeline CPU.
 
 # Properties
 * CPU Frequency : 12.5MHz
