@@ -102,13 +102,24 @@ module DE10_Standard(
 
 wire [11:0] vga_rdaddress;
 wire [7:0]  vga_q;
+wire [7:0]  kb_ascii;
+wire [7:0]  kb_code;
+wire kb_en;
+wire audio_en;
+//assign LEDR = {kb_en, kb_ascii};
 
 ori_sopc cpu(
 	.CLOCK_50(CLOCK_50),
 	.rst(!KEY[0]),
-	.debug(LEDR),
+	.debug(),
 	.vga_q(vga_q),
-	.vga_rdaddress(vga_rdaddress)
+	.vga_rdaddress(vga_rdaddress),
+	.input_ascii(kb_ascii),
+	.input_en(kb_en),
+	.audio_en(audio_en),
+	//DEBUG
+	.mmio_KEY(LEDR[0]),
+	.mmio_KEY_EN(LEDR[1])
 	);
 
 vga video_output(
@@ -123,6 +134,29 @@ vga video_output(
 	.VGA_VS(VGA_VS),
 	.q(vga_q),
 	.rdaddress(vga_rdaddress)
-	);						 
+	);				
 
+keyboard kb(
+	.clk(CLOCK_50),
+	.ps2_clk(PS2_CLK),
+	.ps2_data(PS2_DAT),
+	.ascii_out(kb_ascii),
+	.en(kb_en),
+	.kb_code(kb_code)
+	);
+	
+audio player(
+	.clk(CLOCK_50),
+   .DACLRCLK(AUD_DACLRCK), 
+   .DACDAT(AUD_DACDAT),
+	.XCK(AUD_XCK),
+	.BCLK(AUD_BCLK),
+	.I2C_SCLK(AUD_ADCLRCK),
+	.I2C_SDAT(AUD_ADCDAT),	 
+	.ch_n(KEY[3]),
+	.dirs(SW[9]),
+	.ken(kb_en),
+	.kb_code(kb_code),
+	.en(audio_en)
+	);
 endmodule

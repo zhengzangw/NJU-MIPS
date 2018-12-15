@@ -23,6 +23,11 @@
 `define	 NOTINDELAYSLOT 1'b0
 
 `define MMIO_NO 32'h006000
+`define MMIO_KEY 32'h005000
+`define MMIO_KEY_EN 32'h005004
+`define MMIO_AUDIO 32'h005008
+`define MMIO_ROM_SPECIAL_START 32'h003900
+`define MMIO_ROM_SPECIAL_END	 32'h003964
 
 //***** RAM *****
 `define DATAADDRBUS 31:0
@@ -41,12 +46,10 @@
 
 
 //***** ROM *****
-`define INSTNUM     1023
-`define INSTNUMLOG2 19
-`define INSTMEMNUM  4095
-`define INSTMEMNUMLOG2 13     
+`define INSTNUM     4095
+`define INSTNUMLOG2 13    
 `define MMIO_ROM_START 32'h000000
-`define MMIO_ROM_END   32'h004000
+`define MMIO_ROM_END   32'h003900
 `define   INSTADDRBUS    31:0
 `define   INSTBUS    31:0
 

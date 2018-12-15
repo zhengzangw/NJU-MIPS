@@ -2,14 +2,17 @@
 module ori_sopc(
     input wire CLOCK_50,
     input wire rst,
-	 //output [7:0] vga_q,
-	 //input [11:0] vga_rdaddress,
-	 
+	 output wire [7:0] vga_q,
+	 input wire [11:0] vga_rdaddress,
+	 input wire [7:0] input_ascii,
+	 input wire input_en,
+	 output reg audio_en,
 	 //DEBUG
-	 output wire[9:0] debug
+	 output wire[9:0] debug,
+	 output wire mmio_KEY,
+	 output wire mmio_KEY_EN
 );
 
-    
 	 wire mem_we_i;
     wire[`REGBUS] mem_addr_i;
     wire[`REGBUS] mem_data_i;
@@ -20,14 +23,32 @@ module ori_sopc(
 	 wire [`REGBUS] inst_data_o;
 	 wire[`INSTADDRBUS] inst_addr;
     wire[`INSTBUS] inst;
+	 wire[`INSTBUS] inst_rom;
+	 wire[`INSTBUS] inst_ram;
     wire rom_ce;
 	 
 	 wire [`REGBUS] video_data_o;
+	 wire [`REGBUS] special_data_o;
 	 
 	 wire mmio_GRAM = (mem_addr_i >= `MMIO_GRAM_START) && (mem_addr_i < `MMIO_GRAM_END);
 	 wire mmio_ROM = (mem_addr_i >= `MMIO_ROM_START) && (mem_addr_i < `MMIO_ROM_END);
+	 wire mmio_SPECIAL = (mem_addr_i >= `MMIO_ROM_SPECIAL_START) && (mem_addr_i < `MMIO_ROM_SPECIAL_END);
 	 wire no_mmio = (mem_addr_i >= `MMIO_NO);
-	 wire [`REGBUS] ram_data_return = (mmio_GRAM)?video_data_o:((mmio_ROM)?inst_data_o:mem_data_o);
+	 assign mmio_KEY = (mem_addr_i == `MMIO_KEY);
+	 assign mmio_KEY_EN = (mem_addr_i == `MMIO_KEY_EN);
+	 wire mmio_AUDIO = (mem_addr_i == `MMIO_AUDIO);
+	 reg [`REGBUS] kb_ascii;
+	 reg [`REGBUS] kb_en;
+	 wire [`REGBUS] ram_data_return = (mmio_GRAM)?
+														video_data_o:(mmio_ROM)?
+														inst_data_o:(mmio_KEY)?
+														{4{input_ascii}}:(mmio_KEY_EN)?
+														{4{7'b0,input_en}}:(mmio_SPECIAL)?
+														special_data_o:(no_mmio)?
+														mem_data_o:`ZEROWORD;
+														
+	 wire special_inst = (inst_addr >= `MMIO_ROM_SPECIAL_START) && (inst_addr < `MMIO_ROM_SPECIAL_END);
+	 assign inst = (special_inst)?inst_ram:inst_rom;
 	 
 	 wire clk_12M;
 	 clkgen #(12500000)clk12M(
@@ -36,6 +57,27 @@ module ori_sopc(
 		  .clken(1'b1),
 		  .clkout(clk_12M)
     );
+	 
+	 always @(clk_12M)
+	 begin
+		if (mmio_AUDIO && mem_we_i && mem_ce_i) begin
+			audio_en <= mem_data_i[0];
+		end
+	 end
+	 
+	 inst_ram inst_ram0(
+	 .clk(~clk_12M),
+	 .rom_ce(rom_ce),
+    .ce(mem_ce_i),
+
+    .inst_addr(inst_addr-`MMIO_ROM_SPECIAL_START),
+    .inst(inst_ram),
+	 
+	 .we(mmio_SPECIAL && mem_we_i),
+	 .addr(mem_addr_i - `MMIO_ROM_SPECIAL_START),
+	 .data_i(mem_data_i),
+	 .data_o(special_data_o)
+);
 
     NJU_MIPS mips0(
         .clk(clk_12M), .rst(rst),
@@ -59,7 +101,7 @@ module ori_sopc(
         .ce(rom_ce),
 		  
         .inst_addr(inst_addr), 
-		  .inst(inst),
+		  .inst(inst_rom),
 		  
 		  .addr(mem_addr_i),
 		  .sel(mem_sel_i),
@@ -70,15 +112,13 @@ module ori_sopc(
 		.clk(CLOCK_50),
 		.ce(mem_ce_i),
 		
-		.addr(mem_addr_i),
+		.addr(mem_addr_i - `MMIO_NO),
 		.sel(mem_sel_i),
 		.we(no_mmio && mem_we_i),
 		.data_i(mem_data_i),
-		.data_o(video_data_o)
+		.data_o(mem_data_o)
 	 );
 	
-	wire				  [7:0]		vga_q;
-	wire	        [11:0]    vga_rdaddress;
 	 video_ram video_ram0(
 		 .clk(CLOCK_50),
 		 .ce(mem_ce_i),
@@ -87,24 +127,11 @@ module ori_sopc(
 		 .sel(mem_sel_i),
 		 .we(mmio_GRAM && mem_we_i),
 		 .data_i(mem_data_i),
-		 .data_o(mem_data_o),
+		 .data_o(video_data_o),
 		 
 		 .vga_rdaddress(vga_rdaddress),
 		 .vga_q(vga_q)
 	 );
-	 
-	 vga video_output(
-	.CLOCK_50(CLOCK_50),
-	.VGA_BLANK_N(VGA_BLANK_N),
-	.VGA_B(VGA_B),
-	.VGA_CLK(VGA_CLK),
-	.VGA_G(VGA_G),
-	.VGA_HS(VGA_HS),
-	.VGA_R(VGA_R),
-	.VGA_SYNC_N(VGA_SYNC_N),
-	.VGA_VS(VGA_VS),
-	.q(vga_q),
-	.rdaddress(vga_rdaddress)
-	);			
+
 
 endmodule

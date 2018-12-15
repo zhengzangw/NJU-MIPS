@@ -25,7 +25,7 @@ module vga(
 	wire [7:0] x = (h_addr)/9;
 	assign rdaddress = x+y*70;
 	//16*9
-	wire [3:0] dx = (h_addr)%9-1;
+	wire [3:0] dx = (h_addr)%9 - 1;
 	wire [3:0] dy = (v_addr)%16;
 	wire [11:0] print_code;
 	wire [7:0] ascii = q;
@@ -35,8 +35,8 @@ module vga(
 		.q(print_code)
 	);
 	//480*630
-	wire [23:0] ft_color = 24'hFF00FF;
-	wire [23:0] bg_color = 24'h00FF00;
+	wire [23:0] ft_color = 24'hFFFFFF;
+	wire [23:0] bg_color = 24'h000000;
 	wire [23:0] tmp_data = (print_code[dx]) ? ft_color:bg_color;
 	wire [23:0] vga_data = (x>=8'd70||ascii==0) ? bg_color:tmp_data;
 	vga_ctrl vga_controller(VGA_CLK, 1'b0, vga_data,

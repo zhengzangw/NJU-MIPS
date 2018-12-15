@@ -21,7 +21,7 @@ module video_ram(
 		.address_a(addr[`VIDEOMEMNUMLOG2+1:2]),
 		.wren_a(ce&&we&&sel[0]),
 		.data_a(data_i[7:0]),
-		.q_a(data_mem0),
+		.q_a(),
 		
 		.address_b(vga_rdaddress[`VIDEOMEMNUMLOG2+1:2]),
 		.wren_b(1'b0),
@@ -29,13 +29,13 @@ module video_ram(
 		.q_b(video_mem0)
 	);
 	
-	video_ram_ip0 ram1(
+	video_ram_ip1 ram1(
 		.clock(clk), 
 		
 		.address_a(addr[`VIDEOMEMNUMLOG2+1:2]),
 		.wren_a(ce&&we&&sel[1]),
 		.data_a(data_i[15:8]),
-		.q_a(data_mem1),
+		.q_a(),
 		
 		.address_b(vga_rdaddress[`VIDEOMEMNUMLOG2+1:2]),
 		.wren_b(1'b0),
@@ -43,13 +43,13 @@ module video_ram(
 		.q_b(video_mem1)
 	);
 	
-	video_ram_ip0 ram2(
+	video_ram_ip2 ram2(
 		.clock(clk), 
 		
 		.address_a(addr[`VIDEOMEMNUMLOG2+1:2]),
 		.wren_a(ce&&we&&sel[2]),
 		.data_a(data_i[23:16]),
-		.q_a(data_mem2),
+		.q_a(),
 		
 		.address_b(vga_rdaddress[`VIDEOMEMNUMLOG2+1:2]),
 		.wren_b(1'b0),
@@ -57,23 +57,80 @@ module video_ram(
 		.q_b(video_mem2)
 	);
 	
-	video_ram_ip0 ram3(
+	video_ram_ip3 ram3(
 		.clock(clk), 
 		
 		.address_a(addr[`VIDEOMEMNUMLOG2+1:2]),
 		.wren_a(ce&&we&&sel[3]),
 		.data_a(data_i[31:24]),
-		.q_a(data_mem3),
+		.q_a(),
 		
 		.address_b(vga_rdaddress[`VIDEOMEMNUMLOG2+1:2]),
 		.wren_b(1'b0),
 		.data_b(`ZEROBYTE),
 		.q_b(video_mem3)
 	);
+	
+	video_ram_ip0 rambk0(
+		.clock(clk), 
+		
+		.address_a(addr[`VIDEOMEMNUMLOG2+1:2]),
+		.wren_a(ce&&we&&sel[0]),
+		.data_a(data_i[7:0]),
+		.q_a(),
+		
+		.address_b(addr[`VIDEOMEMNUMLOG2+1:2]),
+		.wren_b(1'b0),
+		.data_b(`ZEROBYTE),
+		.q_b(data_mem0)
+	);
+	
+	video_ram_ip1 rambk1(
+		.clock(clk), 
+		
+		.address_a(addr[`VIDEOMEMNUMLOG2+1:2]),
+		.wren_a(ce&&we&&sel[1]),
+		.data_a(data_i[15:8]),
+		.q_a(),
+		
+		.address_b(addr[`VIDEOMEMNUMLOG2+1:2]),
+		.wren_b(1'b0),
+		.data_b(`ZEROBYTE),
+		.q_b(data_mem1)
+	);
+	
+	video_ram_ip2 rambk2(
+		.clock(clk), 
+		
+		.address_a(addr[`VIDEOMEMNUMLOG2+1:2]),
+		.wren_a(ce&&we&&sel[2]),
+		.data_a(data_i[23:16]),
+		.q_a(),
+		
+		.address_b(addr[`VIDEOMEMNUMLOG2+1:2]),
+		.wren_b(1'b0),
+		.data_b(`ZEROBYTE),
+		.q_b(data_mem2)
+	);
+	
+	video_ram_ip3 rambk3(
+		.clock(clk), 
+		
+		.address_a(addr[`VIDEOMEMNUMLOG2+1:2]),
+		.wren_a(ce&&we&&sel[3]),
+		.data_a(data_i[31:24]),
+		.q_a(),
+		
+		.address_b(addr[`VIDEOMEMNUMLOG2+1:2]),
+		.wren_b(1'b0),
+		.data_b(`ZEROBYTE),
+		.q_b(data_mem3)
+	);
 
 	
 	always @(posedge clk) begin
-		if (we == `WRITEDISABLE) begin
+		if (ce == `CHIPDISABLE) begin
+	   end else if (we == `WRITEDISABLE) begin
 			data_o <= {data_mem3, data_mem2, data_mem1, data_mem0};
 		end else
 			data_o <= `ZEROWORD;
