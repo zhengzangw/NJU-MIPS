@@ -1,11 +1,20 @@
 # Introduction
 NJU_MIPS is course project for Experimemts in Digital Logit Circuits. It is a MIPS32 system with 5 levels pipeline CPU.
 
-# Properties
+# Instruction
+| NAME    | FUNCTION                          |
+| ----    | --------                          |
+| ./hello | show "Hello World"                |
+| ./fib   | show nth fibbonaci number         |
+| ./gdb   | step over demo programme          |
+| ./mu    | open digital piano(cannot return) |
+
+# Attributes
 * CPU Frequency : 12.5MHz
 * Align: Big Endian
 * Memory Size : 128KB
 * Instruction ROM Size : 4KB
+* Support Instruction: All supported expect ones with coprocessor and interrupt. (ll, sc is not implemented)
 
 # MMIO structure
 |       ADDRESS        |     DESCRIPTION       |      FUNCTION         |

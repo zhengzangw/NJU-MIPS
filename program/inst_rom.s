@@ -429,6 +429,10 @@ fib:
     ori     $7,$31,0x0
     ori     $8,$0,0x0                       # data input
     ori     $9,$0,0xa                       # 0x0a = 10
+    ori     $10,$0,0x0                       # data input
+    ori     $11,$0,0x0                       # data input
+    ori     $12,$0,0x0                       # data input
+    ori     $13,$0,0x0                       # data input
 fib_readinput:
     jal		readthekeybroad				    # jump to readthekeybroad and save position to $ra call readthekeybroad
     nop
