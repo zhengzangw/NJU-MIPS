@@ -29,8 +29,8 @@ module keyboard(
 	ps2_keyboard keyboard(
 	.clk(clk),.clrn(clrn),.ps2_clk(ps2_clk),.ps2_data(ps2_data),
 	.nextdata_n(nextdata_n),.ready(ready),.overflow(overflow),.data(data));
-	ROM_kb romkb(.clock(clk),.address(in_code),.q(ascii_1));
-	ROM_kb_shift romkbshift(.clock(clk),.address(in_code),.q(ascii_2));
+	kb_rom romkb(.clock(clk),.address(in_code),.q(ascii_1));
+	kb_shift_rom romkbshift(.clock(clk),.address(in_code),.q(ascii_2));
 	
 	
 	assign ascii_out = (shift==0) ? ascii_1 : ascii_2;

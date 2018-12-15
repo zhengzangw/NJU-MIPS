@@ -1,3 +1,3 @@
 .PHONY: clean
 clean:
-	rm -f *.bak
+	rm -rf *.bak
