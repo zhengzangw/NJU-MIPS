@@ -138,10 +138,10 @@ module video_ram(
 	
 	always @(posedge clk) begin
 		case (vga_rdaddress[1:0])
-			2'd0: vga_q <= video_mem0;
-			2'd1: vga_q <= video_mem1;
-			2'd2: vga_q <= video_mem2;
-			2'd3: vga_q <= video_mem3;
+			2'd3: vga_q <= video_mem0;
+			2'd2: vga_q <= video_mem1;
+			2'd1: vga_q <= video_mem2;
+			2'd0: vga_q <= video_mem3;
 			default: begin
 			end
 		endcase

@@ -14,6 +14,9 @@ module cpu(
 	 output wire[3:0] ram_sel_o,
 	 output wire	ram_ce_o
 );
+
+
+
 	 //pc_reg - pc-id
     wire[`INSTADDRBUS] pc;
     wire[`INSTADDRBUS] id_pc_i;

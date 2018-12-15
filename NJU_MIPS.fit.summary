@@ -1,12 +1,12 @@
-Fitter Status : Successful - Sat Dec 15 19:13:22 2018
+Fitter Status : Successful - Sun Dec 16 00:38:15 2018
 Quartus Prime Version : 17.1.0 Build 590 10/25/2017 SJ Lite Edition
 Revision Name : NJU_MIPS
 Top-level Entity Name : NJU_MIPS
 Family : Cyclone V
 Device : 5CSXFC6D6F31C6
 Timing Models : Final
-Logic utilization (in ALMs) : 3,423 / 41,910 ( 8 % )
-Total registers : 2243
+Logic utilization (in ALMs) : 3,425 / 41,910 ( 8 % )
+Total registers : 2244
 Total pins : 111 / 499 ( 22 % )
 Total virtual pins : 0
 Total block memory bits : 798,784 / 5,662,720 ( 14 % )

@@ -1,5 +1,6 @@
 ifndef CROSS_COMPILE
-	CROSS_COMPILE = mips-linux-gnu-
+	#CROSS_COMPILE = mips-linux-gnu-
+CROSS_COMPILE = mips-sde-elf-
 endif
 CC = $(CROSS_COMPILE)as
 LD = $(CROSS_COMPILE)ld
@@ -8,7 +9,7 @@ OBJDUMP = $(CROSS_COMPILE)objdump
 
 OBJECT = inst_rom.o
 
-all: inst_rom.data
+all: inst_rom.data inst_rom.mif debug
 
 %.o: %.s
 	$(CC) -mips32 $< -o $@
@@ -33,5 +34,5 @@ debug:
 	$(OBJDUMP) -D inst_rom.om > inst_rom.asm
 
 git:
-	@git add .
-	@git commit -m "auto-commit: Update Program"
+	#@git add .
+	#@git commit -m "auto-commit: Update Program"

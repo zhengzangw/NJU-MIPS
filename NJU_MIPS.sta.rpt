@@ -1,5 +1,5 @@
 TimeQuest Timing Analyzer report for NJU_MIPS
-Sat Dec 15 19:13:59 2018
+Sun Dec 16 00:38:53 2018
 Quartus Prime Version 17.1.0 Build 590 10/25/2017 SJ Lite Edition
 
 
@@ -100,14 +100,14 @@ refer to the applicable agreement for further details.
 ; Number detected on machine ; 4           ;
 ; Maximum allowed            ; 4           ;
 ;                            ;             ;
-; Average used               ; 2.24        ;
+; Average used               ; 2.11        ;
 ; Maximum used               ; 4           ;
 ;                            ;             ;
 ; Usage by Processor         ; % Time Used ;
 ;     Processor 1            ; 100.0%      ;
-;     Processor 2            ;  41.5%      ;
-;     Processor 3            ;  41.4%      ;
-;     Processor 4            ;  41.4%      ;
+;     Processor 2            ;  37.1%      ;
+;     Processor 3            ;  37.0%      ;
+;     Processor 4            ;  36.9%      ;
 +----------------------------+-------------+
 
 
@@ -116,7 +116,7 @@ refer to the applicable agreement for further details.
 +---------------+--------+--------------------------+
 ; SDC File Path ; Status ; Read at                  ;
 +---------------+--------+--------------------------+
-; NJU_MIPS.SDC  ; OK     ; Sat Dec 15 19:13:43 2018 ;
+; NJU_MIPS.SDC  ; OK     ; Sun Dec 16 00:38:37 2018 ;
 +---------------+--------+--------------------------+
 
 
@@ -139,8 +139,8 @@ refer to the applicable agreement for further details.
 +------------+-----------------+-----------------------------------------------------------------------------------+------+
 ; Fmax       ; Restricted Fmax ; Clock Name                                                                        ; Note ;
 +------------+-----------------+-----------------------------------------------------------------------------------+------+
-; 102.6 MHz  ; 102.6 MHz       ; CLOCK_50                                                                          ;      ;
-; 168.58 MHz ; 168.58 MHz      ; player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk ;      ;
+; 110.56 MHz ; 110.56 MHz      ; CLOCK_50                                                                          ;      ;
+; 161.29 MHz ; 161.29 MHz      ; player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk ;      ;
 +------------+-----------------+-----------------------------------------------------------------------------------+------+
 This panel reports FMAX for every clock in the design, regardless of the user-specified clock periods.  FMAX is only computed for paths where the source and destination registers or ports are driven by the same clock.  Paths of different clocks, including generated clocks, are ignored.  For paths between a clock and its inversion, FMAX is computed as if the rising and falling edges are scaled along with FMAX, such that the duty cycle (in terms of a percentage) is maintained. Altera recommends that you always use clock constraints and other slack reports for sign-off analysis.
 
@@ -156,8 +156,8 @@ HTML report is unavailable in plain text report export.
 +-----------------------------------------------------------------------------------+--------+---------------+
 ; Clock                                                                             ; Slack  ; End Point TNS ;
 +-----------------------------------------------------------------------------------+--------+---------------+
-; CLOCK_50                                                                          ; 10.253 ; 0.000         ;
-; player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk ; 48.326 ; 0.000         ;
+; CLOCK_50                                                                          ; 10.955 ; 0.000         ;
+; player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk ; 48.058 ; 0.000         ;
 +-----------------------------------------------------------------------------------+--------+---------------+
 
 
@@ -166,8 +166,8 @@ HTML report is unavailable in plain text report export.
 +-----------------------------------------------------------------------------------+-------+---------------+
 ; Clock                                                                             ; Slack ; End Point TNS ;
 +-----------------------------------------------------------------------------------+-------+---------------+
-; player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk ; 0.217 ; 0.000         ;
-; CLOCK_50                                                                          ; 0.371 ; 0.000         ;
+; player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk ; 0.221 ; 0.000         ;
+; CLOCK_50                                                                          ; 0.373 ; 0.000         ;
 +-----------------------------------------------------------------------------------+-------+---------------+
 
 
@@ -189,8 +189,8 @@ No paths to report.
 ; Clock                                                                             ; Slack  ; End Point TNS ;
 +-----------------------------------------------------------------------------------+--------+---------------+
 ; player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~FRACTIONAL_PLL|vcoph[0]   ; 1.233  ; 0.000         ;
-; CLOCK_50                                                                          ; 8.784  ; 0.000         ;
-; player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk ; 26.299 ; 0.000         ;
+; CLOCK_50                                                                          ; 8.756  ; 0.000         ;
+; player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk ; 26.287 ; 0.000         ;
 +-----------------------------------------------------------------------------------+--------+---------------+
 
 
@@ -211,8 +211,8 @@ Worst Case Available Settling Time: 17.757 ns
 +------------+-----------------+-----------------------------------------------------------------------------------+------+
 ; Fmax       ; Restricted Fmax ; Clock Name                                                                        ; Note ;
 +------------+-----------------+-----------------------------------------------------------------------------------+------+
-; 103.12 MHz ; 103.12 MHz      ; CLOCK_50                                                                          ;      ;
-; 168.92 MHz ; 168.92 MHz      ; player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk ;      ;
+; 111.58 MHz ; 111.58 MHz      ; CLOCK_50                                                                          ;      ;
+; 160.49 MHz ; 160.49 MHz      ; player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk ;      ;
 +------------+-----------------+-----------------------------------------------------------------------------------+------+
 This panel reports FMAX for every clock in the design, regardless of the user-specified clock periods.  FMAX is only computed for paths where the source and destination registers or ports are driven by the same clock.  Paths of different clocks, including generated clocks, are ignored.  For paths between a clock and its inversion, FMAX is computed as if the rising and falling edges are scaled along with FMAX, such that the duty cycle (in terms of a percentage) is maintained. Altera recommends that you always use clock constraints and other slack reports for sign-off analysis.
 
@@ -222,8 +222,8 @@ This panel reports FMAX for every clock in the design, regardless of the user-sp
 +-----------------------------------------------------------------------------------+--------+---------------+
 ; Clock                                                                             ; Slack  ; End Point TNS ;
 +-----------------------------------------------------------------------------------+--------+---------------+
-; CLOCK_50                                                                          ; 10.303 ; 0.000         ;
-; player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk ; 48.338 ; 0.000         ;
+; CLOCK_50                                                                          ; 11.038 ; 0.000         ;
+; player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk ; 48.027 ; 0.000         ;
 +-----------------------------------------------------------------------------------+--------+---------------+
 
 
@@ -232,8 +232,8 @@ This panel reports FMAX for every clock in the design, regardless of the user-sp
 +-----------------------------------------------------------------------------------+-------+---------------+
 ; Clock                                                                             ; Slack ; End Point TNS ;
 +-----------------------------------------------------------------------------------+-------+---------------+
-; player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk ; 0.259 ; 0.000         ;
-; CLOCK_50                                                                          ; 0.376 ; 0.000         ;
+; player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk ; 0.265 ; 0.000         ;
+; CLOCK_50                                                                          ; 0.382 ; 0.000         ;
 +-----------------------------------------------------------------------------------+-------+---------------+
 
 
@@ -255,8 +255,8 @@ No paths to report.
 ; Clock                                                                             ; Slack  ; End Point TNS ;
 +-----------------------------------------------------------------------------------+--------+---------------+
 ; player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~FRACTIONAL_PLL|vcoph[0]   ; 1.233  ; 0.000         ;
-; CLOCK_50                                                                          ; 8.749  ; 0.000         ;
-; player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk ; 26.304 ; 0.000         ;
+; CLOCK_50                                                                          ; 8.715  ; 0.000         ;
+; player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk ; 26.287 ; 0.000         ;
 +-----------------------------------------------------------------------------------+--------+---------------+
 
 
@@ -277,8 +277,8 @@ Worst Case Available Settling Time: 17.725 ns
 +-----------------------------------------------------------------------------------+--------+---------------+
 ; Clock                                                                             ; Slack  ; End Point TNS ;
 +-----------------------------------------------------------------------------------+--------+---------------+
-; CLOCK_50                                                                          ; 14.176 ; 0.000         ;
-; player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk ; 50.973 ; 0.000         ;
+; CLOCK_50                                                                          ; 14.585 ; 0.000         ;
+; player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk ; 50.895 ; 0.000         ;
 +-----------------------------------------------------------------------------------+--------+---------------+
 
 
@@ -287,8 +287,8 @@ Worst Case Available Settling Time: 17.725 ns
 +-----------------------------------------------------------------------------------+-------+---------------+
 ; Clock                                                                             ; Slack ; End Point TNS ;
 +-----------------------------------------------------------------------------------+-------+---------------+
-; player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk ; 0.156 ; 0.000         ;
-; CLOCK_50                                                                          ; 0.180 ; 0.000         ;
+; player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk ; 0.159 ; 0.000         ;
+; CLOCK_50                                                                          ; 0.179 ; 0.000         ;
 +-----------------------------------------------------------------------------------+-------+---------------+
 
 
@@ -310,8 +310,8 @@ No paths to report.
 ; Clock                                                                             ; Slack  ; End Point TNS ;
 +-----------------------------------------------------------------------------------+--------+---------------+
 ; player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~FRACTIONAL_PLL|vcoph[0]   ; 1.233  ; 0.000         ;
-; CLOCK_50                                                                          ; 8.473  ; 0.000         ;
-; player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk ; 26.660 ; 0.000         ;
+; CLOCK_50                                                                          ; 8.474  ; 0.000         ;
+; player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk ; 26.654 ; 0.000         ;
 +-----------------------------------------------------------------------------------+--------+---------------+
 
 
@@ -332,8 +332,8 @@ Worst Case Available Settling Time: 18.605 ns
 +-----------------------------------------------------------------------------------+--------+---------------+
 ; Clock                                                                             ; Slack  ; End Point TNS ;
 +-----------------------------------------------------------------------------------+--------+---------------+
-; CLOCK_50                                                                          ; 14.624 ; 0.000         ;
-; player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk ; 51.201 ; 0.000         ;
+; CLOCK_50                                                                          ; 14.995 ; 0.000         ;
+; player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk ; 51.126 ; 0.000         ;
 +-----------------------------------------------------------------------------------+--------+---------------+
 
 
@@ -342,7 +342,7 @@ Worst Case Available Settling Time: 18.605 ns
 +-----------------------------------------------------------------------------------+-------+---------------+
 ; Clock                                                                             ; Slack ; End Point TNS ;
 +-----------------------------------------------------------------------------------+-------+---------------+
-; player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk ; 0.160 ; 0.000         ;
+; player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk ; 0.162 ; 0.000         ;
 ; CLOCK_50                                                                          ; 0.172 ; 0.000         ;
 +-----------------------------------------------------------------------------------+-------+---------------+
 
@@ -366,7 +366,7 @@ No paths to report.
 +-----------------------------------------------------------------------------------+--------+---------------+
 ; player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~FRACTIONAL_PLL|vcoph[0]   ; 1.233  ; 0.000         ;
 ; CLOCK_50                                                                          ; 8.430  ; 0.000         ;
-; player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk ; 26.657 ; 0.000         ;
+; player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk ; 26.655 ; 0.000         ;
 +-----------------------------------------------------------------------------------+--------+---------------+
 
 
@@ -387,10 +387,10 @@ Worst Case Available Settling Time: 18.623 ns
 +------------------------------------------------------------------------------------+--------+-------+----------+---------+---------------------+
 ; Clock                                                                              ; Setup  ; Hold  ; Recovery ; Removal ; Minimum Pulse Width ;
 +------------------------------------------------------------------------------------+--------+-------+----------+---------+---------------------+
-; Worst-case Slack                                                                   ; 10.253 ; 0.156 ; N/A      ; N/A     ; 1.233               ;
-;  CLOCK_50                                                                          ; 10.253 ; 0.172 ; N/A      ; N/A     ; 8.430               ;
+; Worst-case Slack                                                                   ; 10.955 ; 0.159 ; N/A      ; N/A     ; 1.233               ;
+;  CLOCK_50                                                                          ; 10.955 ; 0.172 ; N/A      ; N/A     ; 8.430               ;
 ;  player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~FRACTIONAL_PLL|vcoph[0]   ; N/A    ; N/A   ; N/A      ; N/A     ; 1.233               ;
-;  player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk ; 48.326 ; 0.156 ; N/A      ; N/A     ; 26.299              ;
+;  player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk ; 48.027 ; 0.159 ; N/A      ; N/A     ; 26.287              ;
 ; Design-wide TNS                                                                    ; 0.0    ; 0.0   ; 0.0      ; 0.0     ; 0.0                 ;
 ;  CLOCK_50                                                                          ; 0.000  ; 0.000 ; N/A      ; N/A     ; 0.000               ;
 ;  player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~FRACTIONAL_PLL|vcoph[0]   ; N/A    ; N/A   ; N/A      ; N/A     ; 0.000               ;
@@ -938,7 +938,7 @@ Worst Case Available Settling Time: 18.623 ns
 +-----------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+----------+----------+----------+----------+
 ; From Clock                                                                        ; To Clock                                                                          ; RR Paths ; FR Paths ; RF Paths ; FF Paths ;
 +-----------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+----------+----------+----------+----------+
-; CLOCK_50                                                                          ; CLOCK_50                                                                          ; 89641    ; 0        ; 0        ; 0        ;
+; CLOCK_50                                                                          ; CLOCK_50                                                                          ; 88866    ; 0        ; 0        ; 0        ;
 ; player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk ; player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk ; 0        ; 0        ; 0        ; 17920    ;
 +-----------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+----------+----------+----------+----------+
 Entries labeled "false path" only account for clock-to-clock false paths and not path-based false paths. As a result, actual path counts may be lower than reported.
@@ -949,7 +949,7 @@ Entries labeled "false path" only account for clock-to-clock false paths and not
 +-----------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+----------+----------+----------+----------+
 ; From Clock                                                                        ; To Clock                                                                          ; RR Paths ; FR Paths ; RF Paths ; FF Paths ;
 +-----------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+----------+----------+----------+----------+
-; CLOCK_50                                                                          ; CLOCK_50                                                                          ; 89641    ; 0        ; 0        ; 0        ;
+; CLOCK_50                                                                          ; CLOCK_50                                                                          ; 88866    ; 0        ; 0        ; 0        ;
 ; player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk ; player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk ; 0        ; 0        ; 0        ; 17920    ;
 +-----------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+----------+----------+----------+----------+
 Entries labeled "false path" only account for clock-to-clock false paths and not path-based false paths. As a result, actual path counts may be lower than reported.
@@ -975,7 +975,7 @@ No non-DPA dedicated SERDES Receiver circuitry present in device or used in desi
 ; Illegal Clocks                  ; 0     ; 0    ;
 ; Unconstrained Clocks            ; 7     ; 7    ;
 ; Unconstrained Input Ports       ; 4     ; 4    ;
-; Unconstrained Input Port Paths  ; 5540  ; 5540 ;
+; Unconstrained Input Port Paths  ; 5538  ; 5538 ;
 ; Unconstrained Output Ports      ; 33    ; 33   ;
 ; Unconstrained Output Port Paths ; 838   ; 838  ;
 +---------------------------------+-------+------+
@@ -1114,7 +1114,7 @@ No non-DPA dedicated SERDES Receiver circuitry present in device or used in desi
 Info: *******************************************************************
 Info: Running Quartus Prime TimeQuest Timing Analyzer
     Info: Version 17.1.0 Build 590 10/25/2017 SJ Lite Edition
-    Info: Processing started: Sat Dec 15 19:13:39 2018
+    Info: Processing started: Sun Dec 16 00:38:33 2018
 Info: Command: quartus_sta NJU_MIPS -c NJU_MIPS
 Info: qsta_default_script.tcl version: #3
 Warning (18236): Number of processors has not been specified which may cause overloading on shared machines.  Set the global assignment NUM_PARALLEL_PROCESSORS in your QSF to an appropriate value for best performance.
@@ -1123,22 +1123,22 @@ Info (21077): Low junction temperature is 0 degrees C
 Info (21077): High junction temperature is 85 degrees C
 Warning (335093): TimeQuest Timing Analyzer is analyzing 195 combinational loops as latches. For more details, run the Check Timing command in the TimeQuest Timing Analyzer or view the "User-Specified and Inferred Latches" table in the Analysis & Synthesis report.
 Info (332104): Reading SDC File: 'NJU_MIPS.SDC'
-Warning (332174): Ignored filter at NJU_MIPS.sdc(15): altera_reserved_tck could not be matched with a port or pin or register or keeper or net or combinational node or node File: C:/Users/Fermat/workplace/NJU_MIPS/NJU_MIPS.sdc Line: 15
-Warning (332049): Ignored create_clock at NJU_MIPS.sdc(15): Argument <targets> is not an object ID File: C:/Users/Fermat/workplace/NJU_MIPS/NJU_MIPS.sdc Line: 15
-    Info (332050): create_clock -name {altera_reserved_tck} -period 40 {altera_reserved_tck} File: C:/Users/Fermat/workplace/NJU_MIPS/NJU_MIPS.sdc Line: 15
-Warning (332174): Ignored filter at NJU_MIPS.sdc(16): altera_reserved_tdi could not be matched with a port File: C:/Users/Fermat/workplace/NJU_MIPS/NJU_MIPS.sdc Line: 16
-Warning (332174): Ignored filter at NJU_MIPS.sdc(16): altera_reserved_tck could not be matched with a clock File: C:/Users/Fermat/workplace/NJU_MIPS/NJU_MIPS.sdc Line: 16
-Warning (332049): Ignored set_input_delay at NJU_MIPS.sdc(16): Argument <targets> is an empty collection File: C:/Users/Fermat/workplace/NJU_MIPS/NJU_MIPS.sdc Line: 16
-    Info (332050): set_input_delay -clock altera_reserved_tck -clock_fall 3 [get_ports altera_reserved_tdi] File: C:/Users/Fermat/workplace/NJU_MIPS/NJU_MIPS.sdc Line: 16
-Warning (332049): Ignored set_input_delay at NJU_MIPS.sdc(16): Argument -clock is not an object ID File: C:/Users/Fermat/workplace/NJU_MIPS/NJU_MIPS.sdc Line: 16
-Warning (332174): Ignored filter at NJU_MIPS.sdc(17): altera_reserved_tms could not be matched with a port File: C:/Users/Fermat/workplace/NJU_MIPS/NJU_MIPS.sdc Line: 17
-Warning (332049): Ignored set_input_delay at NJU_MIPS.sdc(17): Argument <targets> is an empty collection File: C:/Users/Fermat/workplace/NJU_MIPS/NJU_MIPS.sdc Line: 17
-    Info (332050): set_input_delay -clock altera_reserved_tck -clock_fall 3 [get_ports altera_reserved_tms] File: C:/Users/Fermat/workplace/NJU_MIPS/NJU_MIPS.sdc Line: 17
-Warning (332049): Ignored set_input_delay at NJU_MIPS.sdc(17): Argument -clock is not an object ID File: C:/Users/Fermat/workplace/NJU_MIPS/NJU_MIPS.sdc Line: 17
-Warning (332174): Ignored filter at NJU_MIPS.sdc(18): altera_reserved_tdo could not be matched with a port File: C:/Users/Fermat/workplace/NJU_MIPS/NJU_MIPS.sdc Line: 18
-Warning (332049): Ignored set_output_delay at NJU_MIPS.sdc(18): Argument <targets> is an empty collection File: C:/Users/Fermat/workplace/NJU_MIPS/NJU_MIPS.sdc Line: 18
-    Info (332050): set_output_delay -clock altera_reserved_tck 3 [get_ports altera_reserved_tdo] File: C:/Users/Fermat/workplace/NJU_MIPS/NJU_MIPS.sdc Line: 18
-Warning (332049): Ignored set_output_delay at NJU_MIPS.sdc(18): Argument -clock is not an object ID File: C:/Users/Fermat/workplace/NJU_MIPS/NJU_MIPS.sdc Line: 18
+Warning (332174): Ignored filter at NJU_MIPS.sdc(15): altera_reserved_tck could not be matched with a port or pin or register or keeper or net or combinational node or node File: C:/Users/10558/Desktop/NJU_MIPS/NJU_MIPS.sdc Line: 15
+Warning (332049): Ignored create_clock at NJU_MIPS.sdc(15): Argument <targets> is not an object ID File: C:/Users/10558/Desktop/NJU_MIPS/NJU_MIPS.sdc Line: 15
+    Info (332050): create_clock -name {altera_reserved_tck} -period 40 {altera_reserved_tck} File: C:/Users/10558/Desktop/NJU_MIPS/NJU_MIPS.sdc Line: 15
+Warning (332174): Ignored filter at NJU_MIPS.sdc(16): altera_reserved_tdi could not be matched with a port File: C:/Users/10558/Desktop/NJU_MIPS/NJU_MIPS.sdc Line: 16
+Warning (332174): Ignored filter at NJU_MIPS.sdc(16): altera_reserved_tck could not be matched with a clock File: C:/Users/10558/Desktop/NJU_MIPS/NJU_MIPS.sdc Line: 16
+Warning (332049): Ignored set_input_delay at NJU_MIPS.sdc(16): Argument <targets> is an empty collection File: C:/Users/10558/Desktop/NJU_MIPS/NJU_MIPS.sdc Line: 16
+    Info (332050): set_input_delay -clock altera_reserved_tck -clock_fall 3 [get_ports altera_reserved_tdi] File: C:/Users/10558/Desktop/NJU_MIPS/NJU_MIPS.sdc Line: 16
+Warning (332049): Ignored set_input_delay at NJU_MIPS.sdc(16): Argument -clock is not an object ID File: C:/Users/10558/Desktop/NJU_MIPS/NJU_MIPS.sdc Line: 16
+Warning (332174): Ignored filter at NJU_MIPS.sdc(17): altera_reserved_tms could not be matched with a port File: C:/Users/10558/Desktop/NJU_MIPS/NJU_MIPS.sdc Line: 17
+Warning (332049): Ignored set_input_delay at NJU_MIPS.sdc(17): Argument <targets> is an empty collection File: C:/Users/10558/Desktop/NJU_MIPS/NJU_MIPS.sdc Line: 17
+    Info (332050): set_input_delay -clock altera_reserved_tck -clock_fall 3 [get_ports altera_reserved_tms] File: C:/Users/10558/Desktop/NJU_MIPS/NJU_MIPS.sdc Line: 17
+Warning (332049): Ignored set_input_delay at NJU_MIPS.sdc(17): Argument -clock is not an object ID File: C:/Users/10558/Desktop/NJU_MIPS/NJU_MIPS.sdc Line: 17
+Warning (332174): Ignored filter at NJU_MIPS.sdc(18): altera_reserved_tdo could not be matched with a port File: C:/Users/10558/Desktop/NJU_MIPS/NJU_MIPS.sdc Line: 18
+Warning (332049): Ignored set_output_delay at NJU_MIPS.sdc(18): Argument <targets> is an empty collection File: C:/Users/10558/Desktop/NJU_MIPS/NJU_MIPS.sdc Line: 18
+    Info (332050): set_output_delay -clock altera_reserved_tck 3 [get_ports altera_reserved_tdo] File: C:/Users/10558/Desktop/NJU_MIPS/NJU_MIPS.sdc Line: 18
+Warning (332049): Ignored set_output_delay at NJU_MIPS.sdc(18): Argument -clock is not an object ID File: C:/Users/10558/Desktop/NJU_MIPS/NJU_MIPS.sdc Line: 18
 Info (332110): Deriving PLL clocks
     Info (332110): create_generated_clock -source {player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~FRACTIONAL_PLL|refclkin} -divide_by 64 -multiply_by 519 -duty_cycle 50.00 -name {player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~FRACTIONAL_PLL|vcoph[0]} {player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~FRACTIONAL_PLL|vcoph[0]}
     Info (332110): create_generated_clock -source {player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|vco0ph[0]} -divide_by 22 -duty_cycle 50.00 -name {player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk} {player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk}
@@ -1146,15 +1146,15 @@ Info (332151): Clock uncertainty is not calculated until you update the timing n
 Warning (332060): Node: vga:video_output|clkgen:vgaclk|clkout was determined to be a clock but was found without an associated clock assignment.
     Info (13166): Register vga:video_output|vga_ctrl:vga_controller|y_cnt[9] is being clocked by vga:video_output|clkgen:vgaclk|clkout
 Warning (332060): Node: sopc:cpu|clkgen:clk12P5M|clkout was determined to be a clock but was found without an associated clock assignment.
-    Info (13166): Register sopc:cpu|cpu:mips0|ex_mem:ex_mem0|mem_mem_addr[0] is being clocked by sopc:cpu|clkgen:clk12P5M|clkout
+    Info (13166): Register sopc:cpu|cpu:mips0|ex_mem:ex_mem0|mem_aluop[4] is being clocked by sopc:cpu|clkgen:clk12P5M|clkout
 Warning (332060): Node: sopc:cpu|cpu:mips0|id_ex:id_ex0|ex_aluop[0] was determined to be a clock but was found without an associated clock assignment.
-    Info (13166): Latch sopc:cpu|cpu:mips0|id:id0|reg1_o[4] is being clocked by sopc:cpu|cpu:mips0|id_ex:id_ex0|ex_aluop[0]
+    Info (13166): Latch sopc:cpu|cpu:mips0|id:id0|reg2_o[24] is being clocked by sopc:cpu|cpu:mips0|id_ex:id_ex0|ex_aluop[0]
 Warning (332060): Node: audio:player|I2S:i2s|freq_div:DACLRCLKgen|clkout was determined to be a clock but was found without an associated clock assignment.
     Info (13166): Register audio:player|I2S:i2s|k_1[15] is being clocked by audio:player|I2S:i2s|freq_div:DACLRCLKgen|clkout
 Warning (332060): Node: audio:player|I2S:i2s|freq_div:BCLKgen|clkout was determined to be a clock but was found without an associated clock assignment.
     Info (13166): Register audio:player|I2S:i2s|freq_div:DACLRCLKgen|clkout is being clocked by audio:player|I2S:i2s|freq_div:BCLKgen|clkout
 Warning (332060): Node: audio:player|clkgen:I2CCKgen|clkout was determined to be a clock but was found without an associated clock assignment.
-    Info (13166): Register audio:player|I2C_Audio_Config:i2c|I2C_Controller:u0|SD_COUNTER[4] is being clocked by audio:player|clkgen:I2CCKgen|clkout
+    Info (13166): Register audio:player|I2C_Audio_Config:i2c|I2C_Controller:u0|SCLK is being clocked by audio:player|clkgen:I2CCKgen|clkout
 Warning (332060): Node: KEY[0] was determined to be a clock but was found without an associated clock assignment.
     Info (13166): Latch sopc:cpu|audio_en is being clocked by KEY[0]
 Info (332097): The following timing edges are non-unate.  TimeQuest will assume pos-unate behavior for these edges in the clock network.
@@ -1164,24 +1164,24 @@ Info (332097): The following timing edges are non-unate.  TimeQuest will assume 
 Info (332123): Deriving Clock Uncertainty. Please refer to report_sdc in TimeQuest to see clock uncertainties.
 Info: Found TIMEQUEST_REPORT_SCRIPT_INCLUDE_DEFAULT_ANALYSIS = ON
 Info: Analyzing Slow 1100mV 85C Model
-Info (332146): Worst-case setup slack is 10.253
+Info (332146): Worst-case setup slack is 10.955
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):    10.253               0.000 CLOCK_50 
-    Info (332119):    48.326               0.000 player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk 
-Info (332146): Worst-case hold slack is 0.217
+    Info (332119):    10.955               0.000 CLOCK_50 
+    Info (332119):    48.058               0.000 player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk 
+Info (332146): Worst-case hold slack is 0.221
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):     0.217               0.000 player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk 
-    Info (332119):     0.371               0.000 CLOCK_50 
+    Info (332119):     0.221               0.000 player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk 
+    Info (332119):     0.373               0.000 CLOCK_50 
 Info (332140): No Recovery paths to report
 Info (332140): No Removal paths to report
 Info (332146): Worst-case minimum pulse width slack is 1.233
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
     Info (332119):     1.233               0.000 player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~FRACTIONAL_PLL|vcoph[0] 
-    Info (332119):     8.784               0.000 CLOCK_50 
-    Info (332119):    26.299               0.000 player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk 
+    Info (332119):     8.756               0.000 CLOCK_50 
+    Info (332119):    26.287               0.000 player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk 
 Info (332114): Report Metastability: Found 10 synchronizer chains.
     Info (332114): The design MTBF is not calculated because there are no specified synchronizers in the design.
     Info (332114): Number of Synchronizer Chains Found: 10
@@ -1195,15 +1195,15 @@ Info (334004): Delay annotation completed successfully
 Warning (332060): Node: vga:video_output|clkgen:vgaclk|clkout was determined to be a clock but was found without an associated clock assignment.
     Info (13166): Register vga:video_output|vga_ctrl:vga_controller|y_cnt[9] is being clocked by vga:video_output|clkgen:vgaclk|clkout
 Warning (332060): Node: sopc:cpu|clkgen:clk12P5M|clkout was determined to be a clock but was found without an associated clock assignment.
-    Info (13166): Register sopc:cpu|cpu:mips0|ex_mem:ex_mem0|mem_mem_addr[0] is being clocked by sopc:cpu|clkgen:clk12P5M|clkout
+    Info (13166): Register sopc:cpu|cpu:mips0|ex_mem:ex_mem0|mem_aluop[4] is being clocked by sopc:cpu|clkgen:clk12P5M|clkout
 Warning (332060): Node: sopc:cpu|cpu:mips0|id_ex:id_ex0|ex_aluop[0] was determined to be a clock but was found without an associated clock assignment.
-    Info (13166): Latch sopc:cpu|cpu:mips0|id:id0|reg1_o[4] is being clocked by sopc:cpu|cpu:mips0|id_ex:id_ex0|ex_aluop[0]
+    Info (13166): Latch sopc:cpu|cpu:mips0|id:id0|reg2_o[24] is being clocked by sopc:cpu|cpu:mips0|id_ex:id_ex0|ex_aluop[0]
 Warning (332060): Node: audio:player|I2S:i2s|freq_div:DACLRCLKgen|clkout was determined to be a clock but was found without an associated clock assignment.
     Info (13166): Register audio:player|I2S:i2s|k_1[15] is being clocked by audio:player|I2S:i2s|freq_div:DACLRCLKgen|clkout
 Warning (332060): Node: audio:player|I2S:i2s|freq_div:BCLKgen|clkout was determined to be a clock but was found without an associated clock assignment.
     Info (13166): Register audio:player|I2S:i2s|freq_div:DACLRCLKgen|clkout is being clocked by audio:player|I2S:i2s|freq_div:BCLKgen|clkout
 Warning (332060): Node: audio:player|clkgen:I2CCKgen|clkout was determined to be a clock but was found without an associated clock assignment.
-    Info (13166): Register audio:player|I2C_Audio_Config:i2c|I2C_Controller:u0|SD_COUNTER[4] is being clocked by audio:player|clkgen:I2CCKgen|clkout
+    Info (13166): Register audio:player|I2C_Audio_Config:i2c|I2C_Controller:u0|SCLK is being clocked by audio:player|clkgen:I2CCKgen|clkout
 Warning (332060): Node: KEY[0] was determined to be a clock but was found without an associated clock assignment.
     Info (13166): Latch sopc:cpu|audio_en is being clocked by KEY[0]
 Info (332097): The following timing edges are non-unate.  TimeQuest will assume pos-unate behavior for these edges in the clock network.
@@ -1211,24 +1211,24 @@ Info (332097): The following timing edges are non-unate.  TimeQuest will assume 
     Info (332098): Cell: player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER  from: vco0ph[0]  to: divclk
     Info (332098): Cell: player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_REFCLK_SELECT  from: clkin[0]  to: clkout
 Info (332123): Deriving Clock Uncertainty. Please refer to report_sdc in TimeQuest to see clock uncertainties.
-Info (332146): Worst-case setup slack is 10.303
+Info (332146): Worst-case setup slack is 11.038
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):    10.303               0.000 CLOCK_50 
-    Info (332119):    48.338               0.000 player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk 
-Info (332146): Worst-case hold slack is 0.259
+    Info (332119):    11.038               0.000 CLOCK_50 
+    Info (332119):    48.027               0.000 player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk 
+Info (332146): Worst-case hold slack is 0.265
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):     0.259               0.000 player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk 
-    Info (332119):     0.376               0.000 CLOCK_50 
+    Info (332119):     0.265               0.000 player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk 
+    Info (332119):     0.382               0.000 CLOCK_50 
 Info (332140): No Recovery paths to report
 Info (332140): No Removal paths to report
 Info (332146): Worst-case minimum pulse width slack is 1.233
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
     Info (332119):     1.233               0.000 player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~FRACTIONAL_PLL|vcoph[0] 
-    Info (332119):     8.749               0.000 CLOCK_50 
-    Info (332119):    26.304               0.000 player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk 
+    Info (332119):     8.715               0.000 CLOCK_50 
+    Info (332119):    26.287               0.000 player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk 
 Info (332114): Report Metastability: Found 10 synchronizer chains.
     Info (332114): The design MTBF is not calculated because there are no specified synchronizers in the design.
     Info (332114): Number of Synchronizer Chains Found: 10
@@ -1242,15 +1242,15 @@ Info (334004): Delay annotation completed successfully
 Warning (332060): Node: vga:video_output|clkgen:vgaclk|clkout was determined to be a clock but was found without an associated clock assignment.
     Info (13166): Register vga:video_output|vga_ctrl:vga_controller|y_cnt[9] is being clocked by vga:video_output|clkgen:vgaclk|clkout
 Warning (332060): Node: sopc:cpu|clkgen:clk12P5M|clkout was determined to be a clock but was found without an associated clock assignment.
-    Info (13166): Register sopc:cpu|cpu:mips0|ex_mem:ex_mem0|mem_mem_addr[0] is being clocked by sopc:cpu|clkgen:clk12P5M|clkout
+    Info (13166): Register sopc:cpu|cpu:mips0|ex_mem:ex_mem0|mem_aluop[4] is being clocked by sopc:cpu|clkgen:clk12P5M|clkout
 Warning (332060): Node: sopc:cpu|cpu:mips0|id_ex:id_ex0|ex_aluop[0] was determined to be a clock but was found without an associated clock assignment.
-    Info (13166): Latch sopc:cpu|cpu:mips0|id:id0|reg1_o[4] is being clocked by sopc:cpu|cpu:mips0|id_ex:id_ex0|ex_aluop[0]
+    Info (13166): Latch sopc:cpu|cpu:mips0|id:id0|reg2_o[24] is being clocked by sopc:cpu|cpu:mips0|id_ex:id_ex0|ex_aluop[0]
 Warning (332060): Node: audio:player|I2S:i2s|freq_div:DACLRCLKgen|clkout was determined to be a clock but was found without an associated clock assignment.
     Info (13166): Register audio:player|I2S:i2s|k_1[15] is being clocked by audio:player|I2S:i2s|freq_div:DACLRCLKgen|clkout
 Warning (332060): Node: audio:player|I2S:i2s|freq_div:BCLKgen|clkout was determined to be a clock but was found without an associated clock assignment.
     Info (13166): Register audio:player|I2S:i2s|freq_div:DACLRCLKgen|clkout is being clocked by audio:player|I2S:i2s|freq_div:BCLKgen|clkout
 Warning (332060): Node: audio:player|clkgen:I2CCKgen|clkout was determined to be a clock but was found without an associated clock assignment.
-    Info (13166): Register audio:player|I2C_Audio_Config:i2c|I2C_Controller:u0|SD_COUNTER[4] is being clocked by audio:player|clkgen:I2CCKgen|clkout
+    Info (13166): Register audio:player|I2C_Audio_Config:i2c|I2C_Controller:u0|SCLK is being clocked by audio:player|clkgen:I2CCKgen|clkout
 Warning (332060): Node: KEY[0] was determined to be a clock but was found without an associated clock assignment.
     Info (13166): Latch sopc:cpu|audio_en is being clocked by KEY[0]
 Info (332097): The following timing edges are non-unate.  TimeQuest will assume pos-unate behavior for these edges in the clock network.
@@ -1258,24 +1258,24 @@ Info (332097): The following timing edges are non-unate.  TimeQuest will assume 
     Info (332098): Cell: player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER  from: vco0ph[0]  to: divclk
     Info (332098): Cell: player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_REFCLK_SELECT  from: clkin[0]  to: clkout
 Info (332123): Deriving Clock Uncertainty. Please refer to report_sdc in TimeQuest to see clock uncertainties.
-Info (332146): Worst-case setup slack is 14.176
+Info (332146): Worst-case setup slack is 14.585
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):    14.176               0.000 CLOCK_50 
-    Info (332119):    50.973               0.000 player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk 
-Info (332146): Worst-case hold slack is 0.156
+    Info (332119):    14.585               0.000 CLOCK_50 
+    Info (332119):    50.895               0.000 player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk 
+Info (332146): Worst-case hold slack is 0.159
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):     0.156               0.000 player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk 
-    Info (332119):     0.180               0.000 CLOCK_50 
+    Info (332119):     0.159               0.000 player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk 
+    Info (332119):     0.179               0.000 CLOCK_50 
 Info (332140): No Recovery paths to report
 Info (332140): No Removal paths to report
 Info (332146): Worst-case minimum pulse width slack is 1.233
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
     Info (332119):     1.233               0.000 player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~FRACTIONAL_PLL|vcoph[0] 
-    Info (332119):     8.473               0.000 CLOCK_50 
-    Info (332119):    26.660               0.000 player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk 
+    Info (332119):     8.474               0.000 CLOCK_50 
+    Info (332119):    26.654               0.000 player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk 
 Info (332114): Report Metastability: Found 10 synchronizer chains.
     Info (332114): The design MTBF is not calculated because there are no specified synchronizers in the design.
     Info (332114): Number of Synchronizer Chains Found: 10
@@ -1287,15 +1287,15 @@ Info: Analyzing Fast 1100mV 0C Model
 Warning (332060): Node: vga:video_output|clkgen:vgaclk|clkout was determined to be a clock but was found without an associated clock assignment.
     Info (13166): Register vga:video_output|vga_ctrl:vga_controller|y_cnt[9] is being clocked by vga:video_output|clkgen:vgaclk|clkout
 Warning (332060): Node: sopc:cpu|clkgen:clk12P5M|clkout was determined to be a clock but was found without an associated clock assignment.
-    Info (13166): Register sopc:cpu|cpu:mips0|ex_mem:ex_mem0|mem_mem_addr[0] is being clocked by sopc:cpu|clkgen:clk12P5M|clkout
+    Info (13166): Register sopc:cpu|cpu:mips0|ex_mem:ex_mem0|mem_aluop[4] is being clocked by sopc:cpu|clkgen:clk12P5M|clkout
 Warning (332060): Node: sopc:cpu|cpu:mips0|id_ex:id_ex0|ex_aluop[0] was determined to be a clock but was found without an associated clock assignment.
-    Info (13166): Latch sopc:cpu|cpu:mips0|id:id0|reg1_o[4] is being clocked by sopc:cpu|cpu:mips0|id_ex:id_ex0|ex_aluop[0]
+    Info (13166): Latch sopc:cpu|cpu:mips0|id:id0|reg2_o[24] is being clocked by sopc:cpu|cpu:mips0|id_ex:id_ex0|ex_aluop[0]
 Warning (332060): Node: audio:player|I2S:i2s|freq_div:DACLRCLKgen|clkout was determined to be a clock but was found without an associated clock assignment.
     Info (13166): Register audio:player|I2S:i2s|k_1[15] is being clocked by audio:player|I2S:i2s|freq_div:DACLRCLKgen|clkout
 Warning (332060): Node: audio:player|I2S:i2s|freq_div:BCLKgen|clkout was determined to be a clock but was found without an associated clock assignment.
     Info (13166): Register audio:player|I2S:i2s|freq_div:DACLRCLKgen|clkout is being clocked by audio:player|I2S:i2s|freq_div:BCLKgen|clkout
 Warning (332060): Node: audio:player|clkgen:I2CCKgen|clkout was determined to be a clock but was found without an associated clock assignment.
-    Info (13166): Register audio:player|I2C_Audio_Config:i2c|I2C_Controller:u0|SD_COUNTER[4] is being clocked by audio:player|clkgen:I2CCKgen|clkout
+    Info (13166): Register audio:player|I2C_Audio_Config:i2c|I2C_Controller:u0|SCLK is being clocked by audio:player|clkgen:I2CCKgen|clkout
 Warning (332060): Node: KEY[0] was determined to be a clock but was found without an associated clock assignment.
     Info (13166): Latch sopc:cpu|audio_en is being clocked by KEY[0]
 Info (332097): The following timing edges are non-unate.  TimeQuest will assume pos-unate behavior for these edges in the clock network.
@@ -1303,15 +1303,15 @@ Info (332097): The following timing edges are non-unate.  TimeQuest will assume 
     Info (332098): Cell: player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER  from: vco0ph[0]  to: divclk
     Info (332098): Cell: player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_REFCLK_SELECT  from: clkin[0]  to: clkout
 Info (332123): Deriving Clock Uncertainty. Please refer to report_sdc in TimeQuest to see clock uncertainties.
-Info (332146): Worst-case setup slack is 14.624
+Info (332146): Worst-case setup slack is 14.995
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):    14.624               0.000 CLOCK_50 
-    Info (332119):    51.201               0.000 player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk 
-Info (332146): Worst-case hold slack is 0.160
+    Info (332119):    14.995               0.000 CLOCK_50 
+    Info (332119):    51.126               0.000 player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk 
+Info (332146): Worst-case hold slack is 0.162
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):     0.160               0.000 player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk 
+    Info (332119):     0.162               0.000 player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk 
     Info (332119):     0.172               0.000 CLOCK_50 
 Info (332140): No Recovery paths to report
 Info (332140): No Removal paths to report
@@ -1320,7 +1320,7 @@ Info (332146): Worst-case minimum pulse width slack is 1.233
     Info (332119): ========= =================== =====================
     Info (332119):     1.233               0.000 player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~FRACTIONAL_PLL|vcoph[0] 
     Info (332119):     8.430               0.000 CLOCK_50 
-    Info (332119):    26.657               0.000 player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk 
+    Info (332119):    26.655               0.000 player|i2s|XCKgen|xck_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk 
 Info (332114): Report Metastability: Found 10 synchronizer chains.
     Info (332114): The design MTBF is not calculated because there are no specified synchronizers in the design.
     Info (332114): Number of Synchronizer Chains Found: 10
@@ -1331,9 +1331,9 @@ Info (332114): Report Metastability: Found 10 synchronizer chains.
 Info (332102): Design is not fully constrained for setup requirements
 Info (332102): Design is not fully constrained for hold requirements
 Info: Quartus Prime TimeQuest Timing Analyzer was successful. 0 errors, 42 warnings
-    Info: Peak virtual memory: 1136 megabytes
-    Info: Processing ended: Sat Dec 15 19:13:59 2018
+    Info: Peak virtual memory: 5310 megabytes
+    Info: Processing ended: Sun Dec 16 00:38:53 2018
     Info: Elapsed time: 00:00:20
-    Info: Total CPU time (on all processors): 00:00:40
+    Info: Total CPU time (on all processors): 00:00:36
 
 
