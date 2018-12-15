@@ -22,21 +22,16 @@ inst_rom.bin: inst_rom.om
 inst_rom.data: inst_rom.bin
 	./bin2mem -o $@ $<
 
-.PHONY: clean debug copy copymif
+inst_rom.mif : inst_rom.data
+	./txt2mif -o $@ $<
+
+.PHONY: clean debug git
 clean:
 	rm -f *.o *.om *.bin *.data *.asm
 
 debug:
 	$(OBJDUMP) -D inst_rom.om > inst_rom.asm
 
-copy:
+git:
 	@git add .
-	@git commit -m "auto-commit"
-	cp inst_rom.data '/home/fermat/Desktop/Parallels Shared Folders/Home/Desktop/NJU_MIPS/DEBUG'
-
-copymif:
-	@git add .
-	@git commit -m "auto-commit"
-	./txt2mif
-	cp inst_rom.mif '/home/fermat/Desktop/Parallels Shared Folders/Home/Desktop/NJU_MIPS'
-
+	@git commit -m "auto-commit: Update Program"
