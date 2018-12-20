@@ -17,14 +17,20 @@ NJU_MIPS is course project for Experimemts in Digital Logit Circuits. It is a MI
 * Support Instruction: All supported expect ones with coprocessor and interrupt. (ll, sc is not implemented)
 
 # MMIO structure
-|       ADDRESS        |     DESCRIPTION       |      FUNCTION         |
-| -------------------  |  -------------------  | --------------------- | 
-| 0x000000 - 0x003900  |  ROM for instruction  | executable; lw only   |
-| 0x003900 - 0x004000  |  RAM for instruction  | executable; lw,sw only   |
-| 0x004000 - 0x005000  |  GRAM for video  | readable, writable; access by vga($640*480$)   |
-| 0x005000|  keyboard enable  | lb only   |
-| 0x005004|  keyboard ascii   | lb only   |
-| 0x005008|  audio enable     | wb only   |
+| ADDRESS             | DESCRIPTION         | FUNCTION                                    |
+| ------------------- | ------------------- | ---------------------                       |
+| 0x000000 - 0x003900 | ROM for instruction | executable; lw only                         |
+| 0x003900 - 0x004000 | RAM for instruction | executable; lw,sw only                      |
+| 0x004000 - 0x005000 | GRAM for video      | readable, writable; access by vga(640\*480) |
+| 0x005000            | keyboard enable     | lb only                                     |
+| 0x005004            | keyboard ascii      | lb only                                     |
+| 0x005008            | audio enable        | wb only                                     |
+| - 0x006000          | Reserve             |                                             |
+| 0x006000 - 0x008000 | RAM:Data Section    |                                             |
+| 0x008000 - 0x010000 | RAM:Heap            |                                             |
+
+# AM
+AM is introduced in our ics lessons. We add MIPS32 AM to support C program. In test of AM, if succeed, you will see AC in the monitor. Otherwise, WA is shown. For now, dummy.c is tested.
 
 # Load Code
 Code will be load into inst_rom from inst_rom.mif in program. You can use Makefile to generate mif file from .s file. Or you can generate mif file from binary(.data) file. Compilation may takes about 4mins.
